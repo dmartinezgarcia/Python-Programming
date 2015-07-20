@@ -35,10 +35,10 @@ want.
 
 The 'print()' function can display text enclosed in quotes, if you just put the parentheses, it will print a blank line.
 
-'''python
+```python
 >>> print("Hello, World")
 Hello, World
-'''
+```
 
 This is just a brief explanation of the 'print()' function.
 
@@ -57,9 +57,9 @@ The *comments* are notes for human readers, they are ignored by the computer.
 To create a comment in Python you use the '#' symbol. Anything after the symbol (except when used in a string) on the 
 rest of the line is a comment.
 
-'''python
+```python
 # This is a comment.
-'''
+```
 
 ## Notes
 
