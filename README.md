@@ -155,8 +155,8 @@ These are some of the most common and useful mathematical operators in Python:
 |Operator|Description|Example|Result|
 |:-:|:-:|:-:|:-:|
 |+|Addition|7+3|10|
-|-|Subtraction|4|
-|*|Multiplication|21|
+|-|Subtraction|7-3|4|
+|*|Multiplication|7*3|21|
 |/|Division (Float)|7/3|2.3333333|
 |//|Division (Integer)|7//3|2|
 |%|Modulus|7%3|1|
