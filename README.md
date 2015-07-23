@@ -148,7 +148,7 @@ Python has several ways of dealing with numbers to fit all the programming needs
 Example of integer numbers are the following: 1, 30, -50. Examples of float numbers are the following: 1.23, 821.23, 
 -54.1;
 
-## 2.2.1 Mathematical operators
+### 2.2.1 Mathematical operators
 
 These are some of the most common and useful mathematical operators in Python:
 
@@ -160,6 +160,117 @@ These are some of the most common and useful mathematical operators in Python:
 |/|Division (Float)|7/3|2.3333333|
 |//|Division (Integer)|7//3|2|
 |%|Modulus|7%3|1|
+
+The float division is not exact, you can use the *decimal* module that provides support for accurate decimal 
+floating-point arithmetic.
+
+## 2.3 Variables
+
+Variables allow the programmer to store and manipulate information. A *variable* provides a way to label and access 
+information.
+
+### 2.3.1 Creating variables
+
+You can create a variable like this:
+
+```python
+var_name = "val"
+```
+
+In the statement above and assuming the variable `var_name` has not been created previously, the variable `var_name` is 
+created and assigned the a reference to the string literal `"val"`.
+
+### 2.3.2 Using variables
+
+The convenience of using variables is that they can be used the same way as the value they refer to, following from 
+our previous example:
+
+```python
+>>> print(var_name)
+val
+```
+
+or:
+
+```python
+>>> print("What?,", var_name)
+What?, val
+```
+
+### 2.3.3 Naming variables
+
+The following are the two most important rules to keep in mind, otherwise Python will show an error:
+
+1. A variable name can contain only numbers, letters and underscores.
+2. A variable name can't start with a number.
+
+Programmers also tend to follow these guidelines:
+
+1. **Descriptive names**, variable names should give an idea of what they represent.
+2. **Consistency**, for example,with multi-word variables you can use the underscore style (`high_score`) or the 
+capital letter style (`highScore`), but be consistent with your style of coding.
+3. **Traditions of the language**, for example, all variables start with a lowercase letter or avoid using 
+underscores as the first character of the name of a variable.
+4. **Length**, as a guideline, try to keep your variable names under 15 characters.
+
+### 2.3.4 Input
+
+Information that the user inputs can be stored in variables, using the `input()` function.
+
+```python
+name = input("Hey, input something and press enter")
+```
+
+The `input()` function gets information from the user and returns it as a string once the user presses the enter key,
+it takes an argument that is used as prompt for the user.
+
+## 2.4 String methods
+
+*Methods* are similar to functions, they need to be called trough a particular data type. You *invoke* a method by 
+adding a dot, following the name of the method, following by a pair of parentheses, where to include the necessary 
+arguments for the method. For example:
+
+```python
+>>> print("Hey, print this in capital letters.".upper())
+HEY, PRINT THIS IN CAPITAL LETTERS.
+```
+
+Some of the most common string methods are the following:
+
+|Method|Description|
+|:-:|:-|
+|`upper()`|Returns the uppercase version of the string|
+|`lower()`|Returns the lowercase version of the string|
+|`swapcase()`|Returns a new string where each uppercase character becomes lowercase and vice versa|
+|`capitalize()`|Returns a new string where the first character is capitalized and the rest are lowercase|
+|`title()`|Returns a new string where the first character of each word is capitalized and the rest are lowercase|
+|`strip()`|Returns a string where all the tabs, spaces and new lines at the beginning and the end of the string are 
+removed|
+|`replace(*old*, *new*, [,*max*])`| Returns a string where all the *old* occurrences are replaced with the *new* ones, 
+the optional argument *max* limits the number of replacements.|
+
+## 2.5 Conversion between types
+
+These are the functions that convert values to a specific type:
+
+|Function|Description|Example|Result|
+|:-|:-|:-|:-|
+|`float(*x*)`|Returns the floating-point value associated to *x*|`float("10.0")`|10.0|
+|`int(*x*)`|Returns the integer value associated to *x*|`int("10")`|10|
+|`str(*x*)`|Returns the string value associated to *x*|`str(10)`|"10"|
+
+## 2.6 Augmented assignment operators
+
+These are just a shortcut for a calculation and assignment operation, the ones in this table are the ones related to 
+the arithmetical operators:
+
+|Operator|Example|Is equivalent to|
+|:-|:-|:-|
+|\*=|a \*= 10|a = a \* 10|
+|/=|a /= 10|a = a / 10|
+|%=|a %= 10|a = a % 10|
+|+=|a += 10|a = a + 10|
+|-=|a -= 10|a = a - 10|
 
 # 20. Notes
 
@@ -189,3 +300,12 @@ the line \
 continuation character")
 Using the line continuation character
 ```
+
+**Note 5**: Self-documenting code is writing code in a way that is easy to understand for other programmers, you 
+should strive to write self-documented code.
+
+**Note 6**: Using the same function, operator or the like for values of different types is called *overloading*. For 
+example, the plus sign can be used to sum integers or to concatenate strings.
+
+**Note 7**: Putting one function inside another is called nesting functions, this is perfectly fine as long as the 
+return value of the inner function can be used by the outer function.
