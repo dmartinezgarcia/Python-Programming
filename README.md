@@ -253,9 +253,9 @@ These are the functions that convert values to a specific type:
 
 |Function|Description|Example|Result|
 |:-|:-|:-|:-|
-|float(*x*)|Returns the floating-point value associated to *x*|float("10.0")|10.0|
-|int(*x*)|Returns the integer value associated to *x*|int("10")|10|
-|str(*x*)|Returns the string value associated to *x*|str(10)|"10"|
+|float(x)|Returns the floating-point value associated to x|float("10.0")|10.0|
+|int(x)|Returns the integer value associated to x|int("10")|10|
+|str(x)|Returns the string value associated to x|str(10)|"10"|
 
 ## 2.6 Augmented assignment operators
 
