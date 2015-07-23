@@ -252,7 +252,7 @@ Some of the most common string methods are the following:
 These are the functions that convert values to a specific type:
 
 |Function|Description|Example|Result|
-|:-|:-|:-|:-|
+|:---|:----|:----|:----|
 |float(x)|Returns the floating-point value associated to x|float("10.0")|10.0|
 |int(x)|Returns the integer value associated to x|int("10")|10|
 |str(x)|Returns the string value associated to x|str(10)|"10"|
@@ -263,8 +263,8 @@ These are just a shortcut for a calculation and assignment operation, the ones i
 the arithmetical operators:
 
 |Operator|Example|Is equivalent to|
-|:-|:-|:-|
-|*=|a *= 10|a = a * 10|
+|:----|:-----|:------|
+|\*=|a \*= 10|a = a \* 10|
 |/=|a /= 10|a = a / 10|
 |%=|a %= 10|a = a % 10|
 |+=|a += 10|a = a + 10|
