@@ -239,13 +239,13 @@ Some of the most common string methods are the following:
 
 |Method|Description|
 |:-----:|:------|
-|upper()|Returns the uppercase version of the string|
-|lower()|Returns the lowercase version of the string|
-|swapcase()|Returns a new string where each uppercase character becomes lowercase and vice versa|
-|capitalize()|Returns a new string where the first character is capitalized and the rest are lowercase|
-|title()|Returns a new string where the first character of each word is capitalized and the rest are lowercase|
-|strip()|Returns a string where all the tabs, spaces and new lines at the beginning and the end of the string are removed|
-|replace(*old*, *new*, [,*max*])|Returns a string where all the *old* occurrences are replaced with the *new* ones, the optional argument *max* limits the number of replacements.|
+|`upper()`|Returns the uppercase version of the string|
+|`lower()`|Returns the lowercase version of the string|
+|`swapcase()`|Returns a new string where each uppercase character becomes lowercase and vice versa|
+|`capitalize()`|Returns a new string where the first character is capitalized and the rest are lowercase|
+|`title()`|Returns a new string where the first character of each word is capitalized and the rest are lowercase|
+|`strip()`|Returns a string where all the tabs, spaces and new lines at the beginning and the end of the string are removed|
+|`replace(*old*, *new*, [,*max*])`|Returns a string where all the *old* occurrences are replaced with the *new* ones, the optional argument *max* limits the number of replacements.|
 
 ## 2.5 Conversion between types
 
