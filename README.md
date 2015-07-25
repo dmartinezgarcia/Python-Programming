@@ -270,6 +270,216 @@ the arithmetical operators:
 |+=|a += 10|a = a + 10|
 |-=|a -= 10|a = a - 10|
 
+# 3. Branching and while loops
+
+In this chapter you will learn how to selectively execute certain portions of your code and repeat parts of your 
+program. You will learn how to do the following:
+
+- Generate random numbers with `randint()` and `randrange()`
+- Use `if`, `else`, `elif` statements to execute code statements, or not.
+- Use `while` loops to execute certain parts of your code as many times as you want
+
+## 3.1 Generating random numbers
+
+Python provides an easy way to generate *pseudorandom* numbers, for this, you need to use the `random` module using 
+the import statement.
+
+```python
+import random
+```
+
+Then you can have access to the `randint()` function, which generates a random integer between two numbers provided 
+by the user, including those two numbers.
+
+```python
+>>> random.randint(1, 10)
+3
+```
+
+And access to the `randrange()` function, which can be used to generate a random number between zero and a number 
+positive number provided by the user, not including this number.
+
+```python
+>>> random.randrange(10)
+8
+```
+
+## 3.2 Comparison operators
+
+Conditions are commonly created by comparing values, these are the most common comparison operators:
+
+|Operator|Meaning|Sample Condition|Evaluates To|
+|:----:|:----|:-----|:-------|
+|`==`|Equal to|`1 == 1`|True|
+|`!=`|Not equal to|`1 != 2`|True|
+|`>`|Greater than|`3 > 10`|False|
+|`<`|Less than|`5 < 9`|True|
+|`>=`|Greater than or equal to|`2 >= 4`|False|
+|`<=`|Less than or equal to|`2 <= 2`|True|
+
+You perform comparisons on many types but Python won't let you make comparisons for objects of different types that 
+don't have an established definition for order. For example, you can't compare integers and strings.
+
+## 3.3 The If statement
+
+Branching is fundamental to programming, it basically means executing a section of code or skipping it, based on a 
+condition or set of conditions. You can use the `if` statement to assist you in branching.
+
+All `if` statements have at least one condition, something that evaluates to true or false. The keyword `True` in 
+python means true, and the keyword `False` means false.
+
+You can construct an `if` statement by using the `if` keyword, followed by a condition or set of conditions followed 
+by a colon, followed by a block of one or more statements. If the condition evaluates to true, the block of 
+statements will be executed, otherwise they will be skipped.
+
+```python
+if "One string" == "Two strings":
+  print("Will never print this")
+```
+
+In case you want to execute a set of programming statements if the condition evaluates to false, you can use the 
+`else` statement like this:
+
+```python
+if "One string" == "Two strings":
+  print("Will never print this")
+else:
+  print("Will print this")
+```
+
+Note that the `else` must be in the same block as the associated `if`, this also means that both block statements must
+be indented by the same amount of spaces.
+
+You can use the `elif` clause following the same rules as with the `else` clause to evaluate more conditions, for 
+example:
+
+```python
+if "One string" == "Two strings":
+  print("Will never print this")
+elif "One string" == "One string":
+  print("Will print this")
+elif "Two strings" == "Two strings":
+  print("Will never print this, in fact, this condition is not evaluated")
+else:
+  print("Same as above, but in this case there is no condition to evaluate")
+```
+
+In this case, once a condition evaluates to true, the associated block of statements is executed and program flow 
+jumps to the next statements after the `if` statement. This means, that at most, only one block of code is executed, 
+even if several conditions would evaluate to true, only the first one that evaluates to true gets his associated 
+programming statements executed.
+
+While the `else` clause is not necessary in some `if` statements, it is usually useful to use to catch that 
+impossible case that you might think never happen, this way you can keep track of errors and bugs easily.
+
+## 3.4 While loops
+
+The `while` loop lets you execute certain parts of code a defined number of times, based on the evaluation of a 
+condition. It can be written as follows:
+
+```python
+input_var = ""
+while input_var != "hello":
+  response = input("Hello...")
+```
+
+A `while` loop executes the associated block of statements while the condition evaluates to true, if it evaluates to 
+false, the program flow jumps to the first statement after the `while` loop body. This means that the user must make 
+sure that the condition evaluates to true at least once, otherwise the `while` loop never executes.
+
+You can use a `break` statement to exit the loop at any time, for example:
+
+```python
+count = 0
+while True:
+  count = count + 1
+  if count == 10:
+    break
+```
+
+And you can use the `continue` statement to return to the top of the loop, the evaluation of the condition, at any 
+time, for example:
+
+```python
+count = 10
+while count != 0:
+  if count == 5:
+    continue
+  print("Count value is: ")
+  print(count)
+  count = count - 1
+```
+
+In the code above, when `count` equals five, nothing is printed.
+
+The `break` and `continue` statements make it harder for the reader to follow the program flow, however there are 
+cases when using this statements that make the loop become more clearer. It's up to the user to use these statements,
+as usually any `while` loop can be written by just evaluating a condition.
+
+## 3.5 Compound conditions
+
+You can combine simple conditions together with *logical* operators. This way your programs can make decisions based 
+on multiple conditions.
+
+### 3.5.1 The not logical operator
+
+The `not` operator can be used for example in this way:
+
+```python
+var = 0
+if not var:
+  print("This is printed")
+```
+
+The value of `var` is set to zero, which evaluates to false, however the `not` operator makes it evaluate to the 
+opposite of the original. Here is the truth table for the `not` operator:
+
+|Input|Output|
+|:-----:|:------:|
+|False|True|
+|True|False|
+
+### 3.5.2 The and logical operator
+
+The `and` operator can be used for example in this way:
+
+```python
+var0 = 10
+var1 = 0
+if var0 == 10 and var1 == 0:
+  print("This is printed")
+```
+The `and` operator can be used to combine multiple simple conditions. The truth table associated to the `and` 
+operator is the following:
+
+|Input 0|Input 1|Output|
+|:------:|:------:|:-------:|
+|True|True|True|
+|True|False|False|
+|False|True|False|
+|False|False|False|
+
+### 3.5.3 The or logical operator
+
+The `or` logical operator can be used for example in this way:
+
+```python
+var0 = 0
+var1 = 10
+if var0 == 0 or var1 == 20
+  print("This is printed")
+```
+
+As with the `and` operator, the `or` operator can be used to combine multiple simple conditions. The truth table 
+associated with the `or` operator is the following:
+
+|Input 0|Input 1|Output|
+|:------:|:------:|:--------:|
+|True|True|True|
+|True|False|True|
+|False|True|True|
+|False|False|False|
+
 # 20. Notes
 
 **Note 1**: Python is case-sensitive and by convention, function names are in lowercase.
@@ -307,3 +517,30 @@ example, the plus sign can be used to sum integers or to concatenate strings.
 
 **Note 7**: Putting one function inside another is called nesting functions, this is perfectly fine as long as the 
 return value of the inner function can be used by the outer function.
+
+**Note 8**: Modules are files that contain code meant to be used in other programs. Modules need to be imported in 
+your program using the `import` statement, then you can access its members using the dot notation. For example:
+
+```python
+import random
+random.randint(1, 10)
+```
+
+**Note 9**: Blocks are a collection of one single statement or multiple consecutive statements indented by the same 
+amount of spaces, thus creating a logical unit.
+
+**Note 10**: Indentation can be done with tabs or spaces, it is advisable to use spaces and by consistent with it, 
+either two or four, depending on your coding style.
+
+**Note 11**: You can treat any value as a condition, every value, of any type, can be treated as a `True` or `False`.
+The principal rule is that any empty or zero value evaluates as `False` while any other value evaluates to `True`. 
+For example:
+
+```python
+var1 = 10
+var2 = 0
+if var1:
+  print("var1 evaluates to True")
+if var2:
+  print("var2 evaluates to False")
+```
