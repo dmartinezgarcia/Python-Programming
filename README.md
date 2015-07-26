@@ -416,7 +416,7 @@ The `break` and `continue` statements make it harder for the reader to follow th
 cases when using this statements that make the loop become more clearer. It's up to the user to use these statements,
 as usually any `while` loop can be written by just evaluating a condition.
 
-## 3.5 Compound conditions
+## 3.5 Compound conditions and logical operators
 
 You can combine simple conditions together with *logical* operators. This way your programs can make decisions based 
 on multiple conditions.
@@ -479,6 +479,213 @@ associated with the `or` operator is the following:
 |True|False|True|
 |False|True|True|
 |False|False|False|
+
+# 4. For loops, strings and tuples
+
+In this chapter you will learn to do the following:
+
+- Construct `for` loops to move through a sequence
+- Use the `range()` function to create a sequence of numbers
+- Treat strings as sequences
+- Use tuples to harness the power of sequences
+- Use sequence functions and operators
+- Index and slice sequences
+
+## 4.1 For loops
+
+The `for` loop repeats some code based on a *sequence*, an ordered list of things. It repeats some code for each 
+element in the sequence and once it reaches the end of the sequence the program flow exits from the loop.
+
+An example of a sequence could be a string, a string is a sequence of characters. We can use a `for` loop to iterate 
+over a sequence like this:
+
+```python
+for a in "This is a string":
+  print(a, end="")
+print("\n")
+```
+
+For the previous example, the variable `a` is created in case it wasn't created before the `for` loop. This 
+variable contains the elements of the sequence, in this case the string `"This is a string"`, as the loop is executed.
+Inside the loop body, the character is printed, once there are no elements in the sequence to process, the program 
+flow exits from the loop.
+
+You can also use a `for` loop in its traditional form, in which a counter variable is incremented or decreased. For 
+this you can use the `range()` function, which takes three arguments like this, although there are more possibilities 
+for the range function that the reader can check for himself.
+
+```python
+start = 0
+end = 10
+step = 2
+for a in range(lower_bound, upper_bound, step):
+  print(a, end=" ")
+```
+
+This function doesn't generate a sequence of numbers but the next number in the sequence, it generates an iterator, 
+see **Note 11** to know more. However to understand this form of the `for` loop it's fine to think that it generates 
+a sequence of numbers. In the previous example, the output is the following: `0 2 4 6 8 `.
+
+With the possibilities that the `range()` function admits, you can count forwards, count backwards and count in steps
+. Also, there is no need to use the variable defined in the loop inside the loop, for example:
+
+```python
+for i in range(20, 0, -2):
+  print("Print this ten times")
+```
+
+## 4.2 Sequence operators
+
+The *sequence operators* can tell you simple but important things about sequences.
+
+### 4.2.1 The len() function
+
+The `len()` function returns the length of a sequence. For example, with a string:
+
+```python
+>>> len("This is a string")
+16
+```
+
+### 4.2.2 The in operator
+
+You can use the `in` operator anywhere in your program to see if something is included in a sequence, this operator 
+creates a condition that evaluates to `True` or `False`. We have seen examples with the `for` loops about the usage of
+the `in` operator.
+
+```python
+if 5 in range(0, 10, 1):
+  print("This is printed")
+```
+
+### 4.2.3 Indexing
+
+What we have been doing so far is known as *sequential access*, but what if you want to access an specific element in
+a sequence without iterating through the elements, this is called *random access*, you can achieve it by **indexing**.
+
+Think of a sequence, for example an string, each element of the sequence has a numbered position, starting from zero.
+So for example the string `"This"` has a length of four and the last character, `'s'`, is at position three. To 
+access any particular element of a sequence you enclose the position number in brackets like this:
+ 
+```python
+>>> text = "0123456789"
+>>> print(text[0])
+0
+>>> print(text[1])
+1
+>>> print(text[2])
+2
+```
+
+With positive numbers, the counting starts at the beginning of the sequence. You can work with negative position 
+numbers as well, in this case the counting starts at the end of the sequence, so the position numbered `-1` returns the
+last element of the sequence and the position numbered `-2` returns the second to the last element of the sequence, 
+following from our previous example:
+
+```python
+>>> text = "0123456789"
+>>> print(text[-1])
+9
+>>> print(text[-2])
+8
+>>> print(text[-5])
+5
+```
+
+Basically, this table defines all the possibilities:
+
+|Positive numbers|0|1|2|3|4|5|6|7|8|9|
+|:----:||:----:||:----:||:----:||:----:||:----:||:----:||:----:||:----:||:----:||:----:|
+|Text|`0`|`1`|`2`|`3`|`4`|`5`|`6`|`7`|`8`|`9`|
+|Negative numbers|-10|-9|-8|-7|-6|-5|-4|-3|-2|-1|
+
+### 4.2.4 Slicing
+
+With the indexing you can access one element at a time, by slicing, you can access multiple elements in a sequence at a
+time. For slicing, you need to provide an starting position number and an ending position number, enclosed in 
+brackets and separated with a colon, for example:
+
+```python
+>>> text = "0123456789"
+>>> print(text[3:8])
+34567
+```
+
+It's important to note that you can combine positive and negative position numbers, however, if you create an 
+"impossible" combination (for example that the starting point is bigger than the ending point), Python will just 
+return an empty sequence.
+
+There are shortcuts that you should remember regarding slicing, these are the most common ones:
+
+```python
+>>> text = "0123456789"
+# Omitting the starting point means the slicing will start at zero.
+>>> print(text[:5])
+01234
+# Omitting the ending point means the slicing wil end at the end of sequence.
+>>> print(text[3:])
+3456789
+# Omitting both numbers means the slicing will start at zero and end at the end of the sequence.
+>>> print(text[:])
+0123456789
+```
+
+## 4.3 Mutable and immutable sequences
+
+Sequences can be classified in two groups, **mutable** or **immutable**. Mutable sequences are those that can be 
+changed, while immutable means the opposite.
+
+An example of an immutable sequence is a string, you can't modify the elements of a string like this:
+
+```python
+text = "012345"
+text[3] = "5"
+```
+
+The code above will just generate an error. An example of mutable sequences are lists, which we shall see in the 
+future. It's important to note that when you concatenate strings, you are creating strings, not changing an already 
+existing string.
+
+## 4.4 Tuples
+
+**Tuples** are a type of **immutable sequence** that can contain elements of any type, these elements don't have to be
+of the same type. Tuples are similar to *vectors* or *arrays* in other languages, however these structures do not 
+provide the flexibility that Python offers with tuples.
+
+To create a tuple, you just enclose in parentheses a sequence of values separated by commas, for example:
+
+```python
+ex_tuple = (1, "Tuple_String", 1.40)
+```
+
+You can create an empty tuple by just using the parentheses:
+
+```python
+ex_tuple = ()
+```
+
+A tuple, just like any other type, can be used as a condition. When a tuple has no elements, its empty, it evaluates 
+to `False`, while it evaluates to `True` if it has at least one element.
+
+```python
+ex_tuple = ()
+if ex_tuple:
+  print("This is not printed")
+else:
+  print("This is printed")
+```
+
+When using the `print()` function with a tuple, it processes every element in the tuple and returns enclosed in 
+parentheses each result separated by commas.
+
+```python
+>>> ex_tuple = (1, "String", 30.21)
+>>> print(ex_tuple)
+(1, 'String', 30.21)
+```
+
+Since tuples are just a type of sequence, you can do operations such as indexing, slicing and those that we have 
+defined till now with them.
 
 # 20. Notes
 
@@ -544,3 +751,19 @@ if var1:
 if var2:
   print("var2 evaluates to False")
 ```
+
+**Note 12**: For more information about the `range()` function, check the following [link](http://www.pythoncentral
+.io/pythons-range-function-explained/).
+
+**Note 13**: In Python there isn't a simple way to create constants, a common convention among experienced 
+programmers is to create variables names in all caps, however nothing stops you from changing the value of that 
+variable. An example of a constant following this convention could be the following:
+
+```python
+PI = 3.1416
+```
+
+**Note 14**: The keyword `None` is the equivalent to nothing in Python, it can be used to initialize variables for 
+example. As is expected, it evaluates to `False` when used as a condition.
+
+
