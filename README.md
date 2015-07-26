@@ -4,6 +4,13 @@ Book: **Python Programming**, Third Edition by Michael Dawson
 This repository contains the solutions to the exercises and my own notes intended to be used for quick 
 reference or for future reference in case I forget something.
 
+So far the repository contains notes and exercises for the following topics:
+
+- Chapter 1: Getting started
+- Chapter 2: Types, variables and simple I/O
+- Chapter 3: Branching and while loops
+- Chapter 4: For loops, strings and tuples
+
 # 1. Getting Started
 
 By learning Python, one can create something as simple as a game to a business product with a full-featured 
