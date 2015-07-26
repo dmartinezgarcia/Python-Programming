@@ -1,5 +1,8 @@
 # 0. Python-Programming
-Python Programming, Third Edition by Michael Dawson
+Book: **Python Programming**, Third Edition by Michael Dawson
+
+This repository contains the solutions to the exercises and my own notes intended to be used for quick 
+reference or for future reference in case I forget something.
 
 # 1. Getting Started
 
