@@ -697,6 +697,319 @@ parentheses each result separated by commas.
 Since tuples are just a type of sequence, you can do operations such as indexing, slicing and those that we have 
 defined till now with them.
 
+# 5. List and dictionaries
+
+In this chapter you will work with **lists** and **dictionaries**, specifically, you will learn about the following:
+
+- Create, index and slice a list
+- Add and delete elements from a list
+- Use list methods to append and sort a list
+- Use nested sequences to represent even more complex information
+- Use dictionaries to work with pairs of data
+- Add and delete dictionary items
+
+## 5.1 Lists
+
+In this chapter we introduce another type of sequence, *lists*. They are just like tuples but **lists are mutable**. 
+The fact that they are like tuples means that everything you learned for tuples also works with lists.
+
+To create a list, you enclose the elements in square brackets and separated by commas, for example:
+
+```python
+ex_list = ["String", 2, 30.0]
+```
+
+You can create an empty list by not supplying any value:
+
+```python
+ex_list = []
+```
+
+Other operations like the `len()` function, indexing, slicing... works the same as with tuples. The main difference 
+is that list are mutable, and these permits other possibilities.
+
+### 5.1.1 Assigning new elements by indexing and slicing
+
+You can assign an existing a new value by indexing like this:
+
+```python
+>>> ex_list = ["String", 1, 2.0]
+>>> print(ex_list)
+['String', 1, 2.0]
+>>> ex_list[0] = "Changed"
+>>> ex_list[2] = "Changed too"
+>>> print(ex_list)
+['Changed', 1, 'Changed too']
+```
+
+You can do the same by slicing:
+
+```python
+>>> ex_list = ["Hey", 2, 3.0, "Another hey"]
+>>> print(ex_list)
+['Hey', 2, 3.0, 'Another hey']
+# Replacing two elements
+>>> ex_list[0:2] = [0, "D"]
+>>> print(ex_list)
+[0, 'D', 3.0, 'Another hey']
+# Replacing two elements by just one element, the list size is decreased
+>>> ex_list[1:3] = ["A"]
+>>> print(ex_list)
+[0, 'A', 'Another hey']
+```
+
+In any case, you can only do this with existing elements, you can't make operations that result in the list 
+increasing its size or new elements being added to the size, this will result in an error.
+
+### 5.1.2 Deleting elemnents from a list
+
+You can delete elements from a list with the `del` keyword in combination with either indexing or slicing:
+
+```python
+>>> ex_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> del ex_list[0]
+>>> print(ex_list)
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> del ex_list[:3]
+>>> print(ex_list)
+[4, 5, 6, 7, 8, 9]
+```
+
+As you can see, deleting elements don't create gaps, the size of the list is decreased by the amount of elements you 
+delete and elements change their positions.
+
+### 5.1.3 List methods
+
+Through list methods, you can do things such as adding elements, deleting elements based on its value, sort the list 
+or even reverse the order of the list.
+
+With the `append()` method, you can add an element at the end of the list, which makes the size of the list increase 
+by one.
+
+```python
+>>> ex_list = [1, 2, 3, 4]
+>>> print(ex_list)
+[1, 2, 3, 4]
+>>> ex_list.append(5)
+>>> print(ex_list)
+[1, 2, 3, 4, 5]
+```
+
+With the `remove()` method, you can remove the first occurrence of an element from the list, and the size of the list
+is therefore decreased by one.
+
+```python
+>>> ex_list = [0, 1, 2, 2, 2, 3, 4]
+>>> ex_list.remove(2)
+>>> print(ex_list)
+[0, 1, 2, 2, 3, 4]
+>>> ex_list.remove(2)
+>>> print(ex_list)
+```
+
+In contrast with the `del` keyword, this deletes an element based on its value and not on its position. It is important
+to note that the `remove()` method, if the element supplied is not in the list, returns an error. So a safer way to 
+remove an element could be this:
+
+```python
+if 2 in ex_list:
+  ex_list.remove(2)
+```
+
+With the `sort()` method you can order a list, keep in mind that the original order of the elements is as the user 
+entered them. You can sort in ascending order (default) or in descending order (using the `reverse` parameter), the 
+following is an example of both possibilities:
+
+```python
+>>> ex_list = [3, 5, 4, 1, 2, 0]
+# Sort in ascending order
+>>> ex_list.sort()
+>>> print(ex_list)
+[0, 1, 2, 3, 4, 5]
+# Sort in descending order
+>>> ex_list.sort(reverse=True)
+>>> print(ex_list)
+[5, 4, 3, 2, 1, 0]
+```
+
+Here is a table with the most used functions for lists:
+
+|Method|Description|
+|:-------:|:--------:|
+|append(*value*)|Adds value to end of a list|
+|sort()|Sorts the elements, ascending order (smallest value first). For descending order, use the `reverse` parameter.|
+|reverse()|Reverses the order of a list.|
+|count(*value*)|Returns the number of occurrences of value.|
+|index(*value*)|Returns the first position number of where value occurs.|
+|insert(*i*, *value*)|Inserts value at position i.|
+|pop([*i*])|Returns value at position *i* and removes value from the list.|
+|remove(value)|Removes the first occurrence of value from the list.|
+
+## 5.2 When to use tuples and when to use lists
+
+Lists can do everything tuples can and even more, since they are mutable sequences. But these are some of the 
+advantages of tuples over lists:
+
+1. **Tuples are faster than lists**: Because the computer knows they won't change. For simple programs this might not
+make a difference but for larger problems it could be very useful.
+
+2. **Safety and clarity**: Tuples are immutable, which makes them perfect for creating constants. This can add a 
+level of safety and clarity to your code.
+
+3. **Sometimes tuples are required**: For example, Python with certain functions or types requires immutable sequences.
+
+But since lists are so flexible, it's probably best to use them rather than tuples the majority of the time.
+
+## 5.3 Nested sequences
+
+List and tuples are sequences of any type, this means that lists and tuples can contain other tuples and lists, this 
+is what we refer to when we talk about **nested sequences**. Nested sequences are sequences inside other sequences.
+
+### 5.3.1 Creating nested sequences
+
+Creating nested sequences is done following the same rules we defined in previous chapters, for example:
+
+```python
+>>> ex_list = ["S1", ("S2", "S3"), ["S4", "S5", "S6"]]
+>>> print(ex_list[0])
+S1
+>>> print(ex_list[1])
+('S2', 'S3')
+>>> print(ex_list[2])
+['S4', 'S5', 'S6']
+```
+
+As you can see, the list `ex_list` has three elements:
+
+1. The string `"S1"`.
+2. The tuple with two elements: `("S2", "S3")`.
+3. The list with three elements: `["S4", "S5", "S6"]`.
+
+It is more common to find nested sequences that follow a consistent pattern, like this:
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> print(ex_list[0])
+('Carlsberg', 2)
+```
+
+Also, you can create nested sequences inside nested sequences many times, however it can be confusing even for 
+experienced programmers, usually you won't need more than one level of nesting. This is an example of four levels of 
+nesting:
+
+```python
+crazy_tuple = ("T1", ("T2", ("T3" , ("T4", "T4"))))
+```
+
+### 5.3.2 Accessing nested elements
+
+You access elements of a nested sequence just like with any other sequence, through indexing:
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> print(ex_list[0])
+('Carlsberg', 2)
+```
+
+In case you want to access the element of a nested sequence, you can use an intermediate variable:
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> var = ex_list[0]
+>>> print(var[0])
+Carlsberg
+```
+
+Or you can use multiple indexing to access an element directly:
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> print(ex_list[0][0])
+Carlsberg
+```
+
+A more elaborated example of multiple indexing is the following, in this case, we are using a nested sequence with 
+four levels of nesting (the same as in the previous paragraph):
+
+```python
+>>> crazy_tuple = ("T1", ("T2", ("T3" , ("T4", "T4"))))
+>>> print(crazy_tuple[0])
+T1
+>>> print(crazy_tuple[1])
+('T2', ('T3', ('T4', 'T4')))
+>>> print(crazy_tuple[1][0])
+T2
+>>> print(crazy_tuple[1][1])
+('T3', ('T4', 'T4'))
+>>> print(crazy_tuple[1][1][0])
+T3
+>>> print(crazy_tuple[1][1][1])
+('T4', 'T4')
+>>> print(crazy_tuple[1][1][1][0])
+T4
+>>> print(crazy_tuple[1][1][1][1])
+T4
+```
+
+## 5.4 Unpacking a sequence
+
+Unpacking means assigning each element of a sequence to a different variable, it works with any type of sequence and 
+the number of elements in the sequence must be the same as the number of variables, otherwise an error is generated.
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> beer_name, beer_amount = ex_list[2]
+>>> print(beer_name)
+Mahou
+>>> print(beer_amount)
+10
+```
+
+## 5.5 Shared references
+
+A variable refers to a value, this means that the variable doesn't store a copy of the value but just refers to the 
+place in the computer's memory where the value is stored. For immutable types, this is not very important, but for 
+mutable types, it is.
+
+```python
+# In this example, var refers to the location in memory where the string "Hey" is stored.
+var = "Hey"
+```
+
+When several variable refer to the same mutable value, **they share the same reference**, which means that a change 
+to that value through any of the variables means the value changes for all the variables. This can be better 
+explained with an example:
+
+```python
+>>> beer_0 = ["Carlsberg"]
+>>> beer_1 = beer_0
+>>> beer_2 = beer_0
+>>> beer_0[0] = "Soda"
+>>> print(beer_0)
+['Soda']
+>>> print(beer_1)
+['Soda']
+>>> print(beer_2)
+['Soda']
+```
+
+The important thing to note is to be aware of shared references when using mutable values, as if you change the value
+through one of the variables, it will change for all of the variables. You can avoid this effect by just making a 
+copy of the mutable object, one way to achieve it is by slicing:
+
+```python
+>>> beer_0 = ["Carlsberg"]
+>>> beer_1 = beer_0[:]
+>>> beer_2 = beer_0[:]
+>>> beer_0[0] = "Soda"
+>>> print(beer_0)
+['Soda']
+>>> print(beer_1)
+['Carlsberg']
+>>> print(beer_2)
+['Carlsberg']
+```
+
 # 20. Notes
 
 **Note 1**: Python is case-sensitive and by convention, function names are in lowercase.
