@@ -10,6 +10,7 @@ So far the repository contains notes and exercises for the following topics:
 - Chapter 2: Types, variables and simple I/O
 - Chapter 3: Branching and while loops
 - Chapter 4: For loops, strings and tuples
+- Chapter 5: Lists and dictionaries
 
 # 1. Getting Started
 
