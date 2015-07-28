@@ -1010,6 +1010,135 @@ copy of the mutable object, one way to achieve it is by slicing:
 ['Carlsberg']
 ```
 
+## 5.6 Dictionaries
+
+Lists and tuples let your organize things into sequences, with *dictionaries* you store information in pairs. 
+Compared to real dictionaries, where you look up a word to get its definition, in Python you look up a `key` and its 
+`value`.
+
+### 5.6.1 Creating a dictionary
+
+To creaet a dictionary, you have to write a `key`, followed by a colon, followed by a `value`, all of this creates a 
+dictionary `item`, you separate `items` with commas and enclosed all of them in curly brackets to create a dictionary
+. As an example, the following code creates a dictionary:
+
+```python
+ex_dic = {0 : "Zero", 1 : "One", 2 : "Two", 3 : "Three", 4 : "Four", 5 : "Five"}
+```
+
+This code creates a dictionary of six pairs, called `items`. Each item is made of a `key` and a `value`, `keys` are on 
+the left side of the colons and the `values` are on the right side of the colons. The table below serves as more 
+clarification:
+
+|Items|Keys|Values|
+|:----:|:----:|:----:|
+|0 : "Zero"|0|"Zero"|
+|1 : "One"|1|"One"|
+|2 : "Two"|2|"Two"|
+|3 : "Three"|3|"Three"|
+|4 : "Four"|4|"Four"|
+|5 : "Five"|5|"Five"|
+
+### 5.6.2 Operations with dictionaries
+
+To add an `item` to a dictionary, you do the following:
+
+```python
+>>> ex_dic = {"Carlsberg" : "Tesco", "Mahou" : "Asda", "Estrella" : "Cooperative Food"}
+>>> ex_dic["Bavaria"] = "Sansburys"
+>>> print(ex_dic)
+{'Carlsberg': 'Tesco', 'Estrella': 'Cooperative Food', 'Bavaria': 'Sansburys', 'Mahou': 'Asda'}
+```
+
+In case you attempt to do this with an already existing `key`, you replace the `value` associated with that `key`, 
+for example:
+
+```python
+>>> ex_dic = {"Carlsberg" : "Tesco", "Mahou" : "Asda", "Estrella" : "Cooperative Food"}
+>>> ex_dic["Estrella"] = "Spar"
+>>> print(ex_dic)
+{'Carlsberg': 'Tesco', 'Estrella': 'Spar', 'Mahou': 'Asda'}
+```
+
+To delete an item from a dictionary, you can use the `del` keyword, for example:
+
+```python
+del ex_dic["Carlsberg"]
+```
+
+It's important to note that trying to delete a dictionary item through a key that doesn't exist will give you an 
+error, so it's better to know if the key you're using exists or not.
+
+### 5.6.3 Accessing dictionary values
+
+There are many ways to access a dictionary value. The most direct one is to use the `key` to retrieve the value, to 
+get the `value` associated to a `key`, write they `key` in brackets right to the name of the dictionary, similar 
+syntax to indexing, for example:
+
+```python
+>>> ex_dic = {"Carlsberg" : "Tesco", "Mahou" : "Asda", "Estrella" : "Cooperative Food"}
+>>> ex_dic["Carlsberg"]
+'Tesco'
+```
+
+In case you write a `key` that doesn't exist in the dictionary, python will return an error. In order to avoid this, 
+you can use the `in` operator to check if the `key` is in the dictionary before trying to use to to access the 
+`value`, for example:
+
+```python
+if "Carlsberg" in ex_dic:
+  print("This is printed")
+else:
+  print("This is not printed")
+```
+
+Keep in mind that this only tests for `keys` in the dictionary, it doesn't check for values. Accessing through the 
+`key` to the `value` looks similar to indexing, but it's important to note that dictionaries do not have position 
+numbers and therefore indexing will give an error.
+
+You can use the built-in method `get()` of dictionaries to get the value associated to a key without fear of writing 
+a `key` that doesn't exist as this method has safety for those scenarios, for example:
+
+```python
+>>> ex_dic = {"Carlsberg" : "Tesco", "Mahou" : "Asda", "Estrella" : "Cooperative Food"}
+>>> ex_dic.get("Carlsberg")
+'Tesco'
+>>> ex_dic.get("Amstel", "Will return this if key not found")
+'Will return this if key not found'
+```
+
+If you specify a second argument for the `get()` method, it will return that argument if the `key` specified doesn't 
+exist in the dictionary. If you don't supply a second argument and the `key` specified doesn't exist in the 
+dictionary, the return value will be `None`.
+
+### 5.6.4 Accessing dictionary keys
+
+It's not possible to access dictionary keys through the values, that's all there is to it.
+
+### 5.6.5 Dictionary requirements
+
+These are things to keep in mind when using dictionaries:
+
+1. **A dictionary can't contain multiple items with the same key**.
+2. **Keys have to be immutable**
+3. **Values don't have to be unique, they can be mutable or immutable.**
+
+### 5.6.6 Dictionary summary of operations
+
+The following table describes the most common dictionary methods:
+
+|Methods|Description|
+|:----:|:----:|
+|get(key, [default])|Returns the value of `key` if it exists, otherwise the optional `default` is returned, or `None`.|
+|keys()|Returns a view of all the keys in a dictionary.|
+|values()|Returns a view of all the values in a dictionary.|
+|items()|Returns a view of all the items in a dictionary.|
+
+
+As you can see, we have introduced a new concept, `views`, views are dependent to the dictionary (If the dictionary 
+changes the view will also change) and they can be iterated over with a `for` loop for example. As with dictionaries,
+they can't be indexed.
+
 # 20. Notes
 
 **Note 1**: Python is case-sensitive and by convention, function names are in lowercase.
