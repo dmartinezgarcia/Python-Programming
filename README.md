@@ -11,6 +11,7 @@ So far the repository contains notes and exercises for the following topics:
 - Chapter 3: Branching and while loops
 - Chapter 4: For loops, strings and tuples
 - Chapter 5: Lists and dictionaries
+- Chapter 6: Functions
 
 # 1. Getting Started
 
@@ -762,7 +763,7 @@ You can do the same by slicing:
 In any case, you can only do this with existing elements, you can't make operations that result in the list 
 increasing its size or new elements being added to the size, this will result in an error.
 
-### 5.1.2 Deleting elemnents from a list
+### 5.1.2 Deleting elements from a list
 
 You can delete elements from a list with the `del` keyword in combination with either indexing or slicing:
 
@@ -1135,10 +1136,245 @@ The following table describes the most common dictionary methods:
 |values()|Returns a view of all the values in a dictionary.|
 |items()|Returns a view of all the items in a dictionary.|
 
-
 As you can see, we have introduced a new concept, `views`, views are dependent to the dictionary (If the dictionary 
 changes the view will also change) and they can be iterated over with a `for` loop for example. As with dictionaries,
 they can't be indexed.
+
+# 6. Functions
+
+**Functions** are ways to break up big programs into smaller and more manageable pieces of code. You will learn to do
+the following:
+
+- Write your own functions
+- Accept values into your functions through parameters
+- Return information from your functions through return values
+- Work with global variables and constants
+- Create a computer opponent that plays a strategy game
+
+## 6.1 Creating functions
+
+The functions `len()` and `range()` are examples of built-in functions, Python lets you create your own functions so 
+you can better manage your code. Functions should do one job well.
+
+By creating and using functions you using what is known as *abstraction*. It lets you think about the big picture 
+without worrying about the details. 
+
+A principal of *abstraction* is the *encapsulation*, in a function, no variable you create inside or any of its 
+parameters can be accessed outside of the function, this is encapsulation, this helps keep independent code separated
+and only the information that is needed by the function is passed and only information that is needed by the program 
+is returned.
+
+Another great thing about functions is that they can be *reused*, functions you write for some projects can be used 
+in another projects as well, so writing good functions can save you time in your current projects and future 
+projects, for more information about *software reuse*, read **Note 15**.
+
+It's important to note that functions can be grouped into modules, that can be imported into your programs.
+
+## 6.2 Defining a function
+
+To define a function you use the `def` keyword, followed by your function name, and by a pair of parentheses with the
+arguments enclosed, followed by a colon and by an indented block of statements. Naming functions follows the same 
+rules as naming variables, you should try to use names that describe what the function does.
+
+```python
+def ex_function():
+  print("This is an example function.")
+```
+
+The line with the `def` keyword and the block that follows are called a *function definition*. They define what the 
+function does but no code is executed.
+
+To call a function, you use a pair of parentheses, like this:
+
+```python
+>>> ex_function()
+this is an example function
+```
+
+## 6.3 Documenting a function
+
+Functions can be documented with what is called a documentation string, called a *docstring*, this is just a triple 
+quoted string that must be the first line of the function. It appears in the interactive documentation in some IDEs.
+
+```python
+def ex_function():
+  """ This is just an example function that prints a predefined text """
+  print("this is an example function")
+```
+
+Now if I type `help(ex_function)`, in the command line I get the triple quoted string as a result, specifically:
+
+```python
+>>> help(ex_function)
+Help on function ex_function:
+
+ex_function()
+    This is just an example function that prints a predefined text
+```
+
+## 6.4 Function parameters
+
+Parameters are basically variables names inside the parentheses in a function, for example in this case:
+
+```python
+def ex_function(param1, param2):
+  print("Param one value is : " + str(param1) + "\nParam two value is : " + str(param2))
+```
+
+In this case, `param1` and `param2` are *parameters*. Parameters exist only through the function and they are 
+assigned the value of the arguments when a function is called, following from our previous example:
+
+```python
+>>> ex_function(1, "One")
+Param one value is : 1
+Param two value is : One
+```
+
+## 6.5 Return values
+
+Functions that return values make use of the `return` statement, for example:
+
+```python
+def ex_function(param1, param2):
+  sum = param1 + param2
+  return sum
+```
+
+When a `return` line runs, the function passes the value to the part of the program that called it, and the function 
+ends. So, a call to the function above results in the following:
+
+```python
+>>> ex_function(1, 2)
+3
+```
+
+You can pass more than one return value in a function, but make sure that you have enough variables to store the 
+returned information, for example:
+
+```python
+def ex_function(param1, param2):
+  sum = param1 + param2
+  return sum, param1, param2
+
+>>> sum, param1, param2 = ex_function(1, 2)
+>>> print(sum, param1, param2)
+3 1 2
+```
+
+If there are not enough variables to store the returned values, an error will be generated.
+
+## 6.6 Keyword arguments and default parameter values
+
+When you just list parameters separated by commas in a function definition, you create *positional parameters*, for 
+example:
+
+```python
+def ex_function(param1, param2):
+  print(param1, param2)
+```
+
+When you call this function, with just arguments separated by commas, you create *positional arguments*, following 
+from the previous example:
+
+```python
+>>> ex_function("arg1", "arg2")
+arg1 arg2
+```
+
+*Positional arguments* and *positional parameters* are what we have defined so far, when these two are positional, it
+means that the value of the parameters depends on the position of the arguments sent, the first parameter is assigned
+the first argument, the second parameter is assigned the second argument... and so on.
+
+Another possibility is to use keyword arguments, in this case you use the parameter names from the function 
+definition to assign the value of the parameters, you can change the order of the assignments if you wish, for example:
+
+```python
+>>> ex_function(param1 = "arg1", param2 = "arg2")
+arg1 arg2
+>>> ex_function(param2 = "arg2", param1 = "arg1")
+arg1 arg2
+```
+
+By using the parameter names you give clarity to your code, however it might get unnecesary long.You can combine both 
+forms, but it is not advisable, as it gets tricky and confusing.
+
+Finally, you can create parameters that are assigned default values in case they aren't assigned any values, for this
+you just need to modify the function definition like this:
+
+```python
+def ex_function(param1, param2 = "No value passed for param2"):
+  print(param1, param2)
+```
+
+Now, when you call the function, you can omit the second argument:
+
+```python
+>>> ex_function("arg1")
+arg1 No value passed for param2
+>>> ex_function("arg1", "arg2")
+arg1 arg2
+```
+
+It's important to note that once you define a parameter as a default parameter, all the parameters that follow must 
+be default parameters as well, otherwise Python will generate an error. Default parameters are useful when a function
+gets called many times with the same one or more parameters.
+
+## 6.7 Using global variables and constants
+
+There is another way you can share information with functions other than parameters and return values, and these are 
+global variables.
+
+### 6.7.1 Scopes
+
+*Scopes* represent the different areas of your program that are separate from each other. A program gets 
+automatically a *global* scope, variables defined within this scope are called *global variables*, they can be 
+accessed from anywhere within that scope.
+
+When you create a function, you create another scope, variables defined within the function are only accessible in 
+the scope of the function, these are *local variables* and, in this case, local to the function, however, global 
+variables can still be accessed from inside the function.
+
+### 6.7.2 Global variables and functions
+
+As mentioned earlier, global variables can be accessed from inside a function, you can read its value but you can't 
+change it directly, for example this code will work:
+
+```python
+global_var = 10
+
+def ex_function():
+  print(global_var)
+```
+
+But this one will not:
+
+```python
+global_var = 10
+
+def ex_function():
+  global_var = 5
+```
+
+For this last code to work, you need to use the `global` keyword inside the function, this way you it gains full 
+access to the variable, this is the solution:
+
+```python
+global_var = 10
+
+def ex_function():
+  global global_var
+  global_var = 5
+```
+
+It's important to note that if you create inside a function a local variable with the same name as a global variable,
+the local variable has preference, this means that you *shadow* the global variable, the operations you do on the 
+variable only affect the local variable inside the function.
+
+### 6.7.3 When to use global variables and constants
+
+Global variables make programs confusing, because its hard to keep track of where the global variable might change, 
+on the other hand, global constants make the program gain clarity, for example, imagine a program where you have to 
+use in many places a constant value, instead of repeating it over and over, you can just use a global constant.
 
 # 20. Notes
 
@@ -1219,4 +1455,16 @@ PI = 3.1416
 **Note 14**: The keyword `None` is the equivalent to nothing in Python, it can be used to initialize variables for 
 example. As is expected, it evaluates to `False` when used as a condition.
 
+**Note 15**: Software reuse is basically not reinventing the wheel, it consists using existing software and other 
+project elements in new projects. With software reuse, you can do the following:
 
+1. Increase company productivity, by reusing code the amount of effort decreases.
+2. Improve sofware quality, tested pieces of code can be reused knowing that they are bug free.
+3. Consistency accross software products, for example sharing user interfaces can make the user feel comfortable with
+new programs right out the box.
+4. Improve software performance, once a company has a good way of doing something through software, using it again 
+saves the trouble of reinventing the wheel, or even worse, of inventing a less efficient wheel.
+
+**Note 16**: When you pass mutable values as arguments to functions be careful not to change its value (unless this is 
+intended) as the change will remain after exiting the function. This is considered a *side effect* and it is 
+generally frowned upon, you should use return values to communicate with your application.
