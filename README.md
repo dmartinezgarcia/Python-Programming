@@ -12,6 +12,7 @@ So far the repository contains notes and exercises for the following topics:
 - Chapter 4: For loops, strings and tuples
 - Chapter 5: Lists and dictionaries
 - Chapter 6: Functions
+- Chapter 7: Files and Exceptions
 
 # 1. Getting Started
 
@@ -1376,6 +1377,376 @@ Global variables make programs confusing, because its hard to keep track of wher
 on the other hand, global constants make the program gain clarity, for example, imagine a program where you have to 
 use in many places a constant value, instead of repeating it over and over, you can just use a global constant.
 
+# 7. Files and exceptions
+
+In this chapter you will learn how to use files for permanent storage and how to handle errors that your code may 
+generate. Specifically, you will learn to do the following:
+
+- Read from text files
+- Write to text files
+- Read and write more complex data with files
+- Intercept and handle errors during a program's execution
+
+## 7.1 Opening and closing a file
+
+The first step to work with a file is to open it, using the `open()` function. This function takes two arguments, the 
+first one is path to the file. Python first looks in the current directory for the file if no full path is specified.
+
+The second one is the access permisions, which can be any from the following table:
+
+|Mode|Description|
+|:------:|:------:|
+|"r"|Read from a text file. If the file doesn't exist, Python will complain with an error|
+|"w"|Write to a text file. If the file exists, its contents are overwritten. If the file doesn't exist, it's created.|
+|"a"|Append a text file. If the file exists, new data is appended to it. If the file doesn't exist, it's created.|
+|"r+"|Read from and write to a text file. If the file doesn't exist, Python will complain with an error.|
+|"w+"|Write to and read from a text file. If the file exists, its contents are overwritten. If the file doesn't exist, it's created|
+|"a+"|Append and read from a text file. If the file exists, new data is appended to it. If the file doesn't exist, it's created.|
+
+This function then returns a `file` object, which includes many useful methods. This is an example of opening a file:
+
+```python
+>>> text_file = open("text_file.txt", "r")
+```
+
+Once you finish working with a file, it's a good programming practice to close it, you can do it with the following 
+method of the `file` object.
+
+```python
+>>> text_file.close()
+```
+
+## 7.2 Reading from a text file
+
+It's easy to read strings from 'plain text files', they are the same under Windows, Mac or Unix and these operating 
+systems come with tools to edit them.
+
+### 7.2.1 Reading characters from a file
+
+To read characters from a file you use the `read()` method of a `file` object, the `read()` method accepts one 
+argument which tells it the number of characters to read from the file, if this parameter is not specified, the whole
+file will be returned as a string:
+
+```python
+>>> route = "dat.txt"
+>>> file_obj = open(route, "r+")
+>>> print(file_obj.read(4))
+Firs
+>>> print(file_obj.read(4))
+t li
+>>> file_obj.close()
+```
+
+It is important to note that each time you use the `read()` method the read pointer advances the same number of 
+positions as the amount of characters read, to reset the pointer, you can close and open the file again using the 
+functions seen before. Any subsequent reads after there is no more data to read will just return the empty string.
+
+### 7.2.2 Reading characters from a line
+
+Sometimes you just want to work with lines, for this you use the `readline()` method. In this method, you specify the
+number of characters you want to read from the current line, as before, if you don't pass a number it will return the
+whole line.
+
+```python
+>>> route = "dat.txt"
+>>> file_obj = open(route, "r+")
+>>> print(file_obj.readline(4))
+Firs
+>>> print(file_obj.readline(100))
+t line
+
+>>> print(file_obj.readline(100))
+Second line
+
+>>> file_obj.close()
+```
+
+As you can see, once a complete line has been read, it continues with the next line.
+
+### 7.2.3 Reading all the lines into a list
+
+You can read all the lines from a file and create a list with them using hte `readlines()` method. Each line becomes 
+a string object inside the list, for example:
+
+```python
+>>> route = "dat.txt"
+>>> file_obj = open(route, "r+")
+>>> print(file_obj.readlines())
+['First line\n', 'Second line\n', 'Third line\n']
+>>> file_obj.close()
+```
+
+### 7.2.4 Looping through a file
+
+When using a `file` object as a condition in a loop, it returns the lines of the associated text file in succession, 
+for example:
+
+```python
+>>> route = "dat.txt"
+>>> file_obj = open(route, "r+")
+>>> for a in file_obj:
+...     print(a)
+...     
+First line
+
+Second line
+
+Third line
+>>> file_obj.close()
+```
+
+## 7.3 Writing to a text file
+
+There are two basic ways to write strings to a text file.
+
+### 7.3.1 Writing strings to a file
+
+Just as before, the file needs to be opened with correct access permissions, then you use the `write()` operator to 
+write strings to the file:
+
+```python
+>>> route = "tad.txt"
+>>> file_obj = open(route, "w")
+>>> file_obj.write("Write this, and just this")
+>>> file_obj.close()
+```
+
+As you write things on the file, the write pointer advances. You can also use the `writelines()` method to write a list
+of strings to the file, this will be written in succession:
+
+```python
+>>> route = "tad.txt"
+>>> file_obj = open(route, "w")
+>>> list = ["This is a text", "This is another text", "How surprising, this is more text"]
+>>> file_obj.writelines(list)
+>>> file_obj.close()
+```
+
+## 7.4 Reading and writing to a text file summary
+
+This table summarizes every method seen regarding writing to and reading from a text file:
+
+|Method|Description|
+|:----|:----|
+|`close()`|Closes the file. A closed file cannot be read from or written to until opened again.|
+|`read([size])`|Reads *size* characters from a file and returns them as a string. If size is not specified, the method returns all of the characters from the current position to the end of the file.|
+|`readline([size])`|Reads size characters from the current line in a file and returns them as a string. If size is not specified, the method returns all of the characters from the current position to the end of the file.|
+|`readlines()`|Reads all of the lines in a file and returns them as elements in a list.|
+|`write(output)`|Writes the string output to a file.|
+|`writelines(output)`|Writes the strings in the list output to a file.|
+
+## 7.5 Storing data in binary files
+
+Python allows to store complex data in a single file that you can retrieve later, for examples lists or dictionaries.
+
+There are two modules that are important regarding this:
+
+- The *pickle* module allows you to preserve and store complex data in a file.
+- The *shelve* module allows you to store and randomly access pickled objects in a file.
+
+### 7.5.1 Pickling data and writing/reading to a file
+
+Pickling is very similar to writing characters to a file, but instead of characters you write objects and retrieve 
+them sequentially from the file. For this to work, the file must be opened as a binary file, using any of the 
+following parameters as the access mode:
+
+|Mode|Description|
+|:----|:----|
+|"rb"|Read from a binary file. If the file doesn't exist, Python will complain with an error.|
+|"wb"|Write to a binary file. If the file exists, its contents are overwritten. If the file doesn't exist, it's created.|
+|"ab"|Append a binary file. If the file exists, new data is appended to it. If the file doesn't exist, it's created.|
+|"rb+"|Read from and write to a binary file. If the file doesn't exist, Python will complain with an error.|
+|"wb+"|Write to and read from a binary file. If the file exists, its contents are overwritten. If the file doesn't exist, it's created.|
+|"ab+"|Append and read from a binary file. If the file exists, new data is appended to it. If the file doesn't exist, it's created.|
+
+The *pickle* module has a method called *dump()*, which can be used to write complex data to a binary file, this 
+function requires two arguments, the data to pickle and the file object associated to the file where to store it. As 
+an example:
+
+```python
+import pickle
+
+file_loc = "C:\\Users\\Diego\\Desktop\\Learning Python\\Chapter 6 - Functions\\tad.txt"
+file_obj = open(file_loc, "wb+")
+
+ex_list = ["List 1", "List 2", "List 3"]
+ex_tuple = ("Tuple 1", "Tuple 2", "Tuple 3")
+ex_dic = {"Key 1": 40, "Key 2": 50, "Key 3": 60} 
+
+pickle.dump(ex_list, file_obj)
+pickle.dump(ex_tuple, file_obj)
+pickle.dump(ex_dic, file_obj)
+file_obj.close()
+```
+
+To read these elements, you use the `load()` method of the *pickle* module, it retrieves the pickled elements 
+sequentially. Following from our previous example:
+
+```python
+>>> import pickle
+>>> file_loc = "tad.txt"
+>>> file_obj = open(file_loc, "rb+")
+>>> ex_list = pickle.load(file_obj)
+>>> ex_tuple = pickle.load(file_obj)
+>>> ex_dic = pickle.load(file_obj)
+>>> file_obj.close()
+['List 1', 'List 2', 'List 3']
+>>> print(ex_list)
+>>> print(ex_tuple)
+('Tuple 1', 'Tuple 2', 'Tuple 3')
+>>> print(ex_dic)
+{'Key 2': 50, 'Key 3': 60, 'Key 1': 40}
+```
+
+This table is a summary of what we have seen regarding pickling data:
+
+|Function|Description|
+|:------|:------|
+|`dump(object, file, [,bin])`|Writes pickled version of `object` to `file`. If `bin` is `True`, `object` is written in binary format. If `bin` is `False`, it is written in a less efficient but readable format. The default value for this parameter is false.|
+|`load(file)`|Unpickles and returns the next pickled object in `file`.|
+
+### 7.5.2 Random access and pickling
+
+Using the `shelve` module, you can randomly access pickled data. You creata `shelf` that acts like a dictionary, but 
+with pickled objects and files.
+
+Instead of the `open()` function, you use the `open()` method of the `shelve` module. This method takes two 
+arguments, first the file location and then the access mode, which can be one of the following:
+
+|Mode|Description|
+|:-----|:-----|
+|`"c"`|Open a file for reading or writing, if the files doesn't exist, it's created.|
+|`"n"`|Create a new file for reading or writing, if the file exists, its contents are overwritten.|
+|`"r"`|Read from a file. If the file doesn't exist, Python will complain with an error.|
+|`"w"`|Write to a file. If the file doesn't exist, Python will complain with an error.|
+
+By default, the access mode is `"c"`. This is an example on how to use a `shelf`:
+
+```python
+>>> import shelve
+>>> file_loc = "asd.txt"
+# Create the shelf.
+>>> s = shelve.open("file_loc", "n")
+# Add key : value pairs to the shelf.
+>>> s["Colours"] = ("Red", "White", "Black")
+>>> s["Feelings"] = ["Angry", "Happy", "Deluded"]
+>>> s["Sports"] = {"Football": "Real Madrid", "Basketball": "Lakers"}
+# Write everything to the file.
+>>> s.sync()
+# Retrieve a random object from the file using the key.
+>>> ex_feelings = s["Feelings"]
+>>> print(ex_feelings)
+['Angry', 'Happy', 'Deluded']
+# Close the file.
+>>> s.close()
+```
+
+Regarding the `sync()` method, it is used to flush the buffer of data to the file, otherwise it is done periodically. 
+When calling the `close()` method, the same effect is achieved.
+
+It is important to note that when opening a file with the `open()` method of the shelve module, Python might add an 
+extension to the file and create additional files, this behaviour is normal. Also, shelf keys can only be strings.
+
+## 7.6 Exceptions
+
+When Python runs into an error, it raises an **exception**. If nothing is done with the exception, it stop what it's 
+doing and displays an error message detailing the exception.
+
+With Python exception handling, you can catch and handle exceptions so that your program doesn't crash.
+
+### 7.6.1 The try statement
+
+The most basic way to handle exceptions is to use the *try* statement along with the *except* clause. You use the 
+*try* statement for statements that can raise an exception, for example statements that involve external interaction,
+and if an exception is raised, the except clause's associated block of statements is executed. This is an example of 
+the try statement:
+
+```python
+num = A
+try:
+  num_f = float(num)
+except:
+  print("Something went wrong when converting to float.")
+```
+
+In this code, the *except* clause covers all the exceptions that might be raised, this is usually not a good 
+programming practice, each exception should be handled individually. 
+
+### 7.6.2 Exception types
+
+There are many different kinds of exceptions, some are summarized in the following table:
+
+|Exception Type|Description|
+|:-----:|:-----|
+|`IOError`|Raised when an I/O operation fails, such as when an attempt is made to open a nonexistent file in read mode.|
+|`IndexError`|Raised when a sequence is indexed with a number of a nonexistent element.|
+|`KeyError`|Raised when a dictionary key is not found.|
+|`NameError`|Raised when a name of an object is not found.|
+|`SyntaxError`|Raised when a syntax error is encountered.|
+|`TypeError`|Raised when a built-in operation or function is applied to an object of inappropriate type.|
+|`ValueError`|Raised when a built-in operation or function receives an argument that has the right type but an inappropriate value.|
+|`ZeroDivisionError`|Raised when the second argument of a division or module operation is zero.|
+
+The *except* clause allows the programmer to catch certain types of exceptions, for example and following from our 
+previous piece of code:
+
+```python
+num = A
+try:
+  num_f = float(num)
+except ValueError:
+  # We can be more specific about what to print, since we are handling a particular type of exception.
+  print("The value that you tried to convert is invalid.")
+```
+
+You can also handle multiple exception types with just an *except* clause separating them by commas and enclosing in 
+parentheses (like a tuple):
+
+```python
+num = A
+try:
+  num_f = float(num)
+except (TypeError, ValueError):
+  print("The value that you tried to convert is invalid.")
+```
+
+Or you can just write multiple exception clauses for the different exceptions you want to handle, there is no limit 
+to the number of except clauses in a try statement.
+
+### 7.6.3 Treating an exception as an argument
+
+You can get the value of an exception using the `as` keyword in an `except` clause, following from our previous code:
+
+```python
+num = A
+try:
+  num_f = float(num)
+except ValueError as ex_exception:
+  print("This is what the exception has to say: ")
+  print(ex_exception)
+```
+
+The associated value to an exception is usually a text describing the exception.
+
+### 7.6.4 The else clause
+
+You can use the `else` clause in try statements to execute a block of statements in case no exception was raised, 
+following from our previous example:
+
+```python
+num = A
+try:
+  num_f = float(num)
+except ValueError:
+  print("The value that you tried to convert is invalid.")
+except TypeError:
+  print("There was an error in the types while converting.")
+else:
+  print("Everything went fine, change the variable num to a number and I will be printed".)
+```
+
+So, the block of statements of the `else` clause will be executed only if the try block of statements is successful.
+
 # 20. Notes
 
 **Note 1**: Python is case-sensitive and by convention, function names are in lowercase.
@@ -1468,3 +1839,6 @@ saves the trouble of reinventing the wheel, or even worse, of inventing a less e
 **Note 16**: When you pass mutable values as arguments to functions be careful not to change its value (unless this is 
 intended) as the change will remain after exiting the function. This is considered a *side effect* and it is 
 generally frowned upon, you should use return values to communicate with your application.
+
+**Note 17**: If you want to terminate execution, you can call the `sys.exit()` method, which raises an exception that
+which results in the end of the program. You must import the `sys` module first.
