@@ -10,6 +10,10 @@ So far the repository contains notes and exercises for the following topics:
 - Chapter 2: Types, variables and simple I/O
 - Chapter 3: Branching and while loops
 - Chapter 4: For loops, strings and tuples
+- Chapter 5: Lists and dictionaries
+- Chapter 6: Functions
+- Chapter 7: Files and Exceptions
+- Chapter 8: Software Objects
 
 # 1. Getting Started
 
@@ -697,6 +701,1559 @@ parentheses each result separated by commas.
 Since tuples are just a type of sequence, you can do operations such as indexing, slicing and those that we have 
 defined till now with them.
 
+# 5. List and dictionaries
+
+In this chapter you will work with **lists** and **dictionaries**, specifically, you will learn about the following:
+
+- Create, index and slice a list
+- Add and delete elements from a list
+- Use list methods to append and sort a list
+- Use nested sequences to represent even more complex information
+- Use dictionaries to work with pairs of data
+- Add and delete dictionary items
+
+## 5.1 Lists
+
+In this chapter we introduce another type of sequence, *lists*. They are just like tuples but **lists are mutable**. 
+The fact that they are like tuples means that everything you learned for tuples also works with lists.
+
+To create a list, you enclose the elements in square brackets and separated by commas, for example:
+
+```python
+ex_list = ["String", 2, 30.0]
+```
+
+You can create an empty list by not supplying any value:
+
+```python
+ex_list = []
+```
+
+Other operations like the `len()` function, indexing, slicing... works the same as with tuples. The main difference 
+is that list are mutable, and these permits other possibilities.
+
+### 5.1.1 Assigning new elements by indexing and slicing
+
+You can assign an existing a new value by indexing like this:
+
+```python
+>>> ex_list = ["String", 1, 2.0]
+>>> print(ex_list)
+['String', 1, 2.0]
+>>> ex_list[0] = "Changed"
+>>> ex_list[2] = "Changed too"
+>>> print(ex_list)
+['Changed', 1, 'Changed too']
+```
+
+You can do the same by slicing:
+
+```python
+>>> ex_list = ["Hey", 2, 3.0, "Another hey"]
+>>> print(ex_list)
+['Hey', 2, 3.0, 'Another hey']
+# Replacing two elements
+>>> ex_list[0:2] = [0, "D"]
+>>> print(ex_list)
+[0, 'D', 3.0, 'Another hey']
+# Replacing two elements by just one element, the list size is decreased
+>>> ex_list[1:3] = ["A"]
+>>> print(ex_list)
+[0, 'A', 'Another hey']
+```
+
+In any case, you can only do this with existing elements, you can't make operations that result in the list 
+increasing its size or new elements being added to the size, this will result in an error.
+
+### 5.1.2 Deleting elements from a list
+
+You can delete elements from a list with the `del` keyword in combination with either indexing or slicing:
+
+```python
+>>> ex_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> del ex_list[0]
+>>> print(ex_list)
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> del ex_list[:3]
+>>> print(ex_list)
+[4, 5, 6, 7, 8, 9]
+```
+
+As you can see, deleting elements don't create gaps, the size of the list is decreased by the amount of elements you 
+delete and elements change their positions.
+
+### 5.1.3 List methods
+
+Through list methods, you can do things such as adding elements, deleting elements based on its value, sort the list 
+or even reverse the order of the list.
+
+With the `append()` method, you can add an element at the end of the list, which makes the size of the list increase 
+by one.
+
+```python
+>>> ex_list = [1, 2, 3, 4]
+>>> print(ex_list)
+[1, 2, 3, 4]
+>>> ex_list.append(5)
+>>> print(ex_list)
+[1, 2, 3, 4, 5]
+```
+
+With the `remove()` method, you can remove the first occurrence of an element from the list, and the size of the list
+is therefore decreased by one.
+
+```python
+>>> ex_list = [0, 1, 2, 2, 2, 3, 4]
+>>> ex_list.remove(2)
+>>> print(ex_list)
+[0, 1, 2, 2, 3, 4]
+>>> ex_list.remove(2)
+>>> print(ex_list)
+```
+
+In contrast with the `del` keyword, this deletes an element based on its value and not on its position. It is important
+to note that the `remove()` method, if the element supplied is not in the list, returns an error. So a safer way to 
+remove an element could be this:
+
+```python
+if 2 in ex_list:
+  ex_list.remove(2)
+```
+
+With the `sort()` method you can order a list, keep in mind that the original order of the elements is as the user 
+entered them. You can sort in ascending order (default) or in descending order (using the `reverse` parameter), the 
+following is an example of both possibilities:
+
+```python
+>>> ex_list = [3, 5, 4, 1, 2, 0]
+# Sort in ascending order
+>>> ex_list.sort()
+>>> print(ex_list)
+[0, 1, 2, 3, 4, 5]
+# Sort in descending order
+>>> ex_list.sort(reverse=True)
+>>> print(ex_list)
+[5, 4, 3, 2, 1, 0]
+```
+
+Here is a table with the most used functions for lists:
+
+|Method|Description|
+|:-------:|:--------:|
+|append(*value*)|Adds value to end of a list|
+|sort()|Sorts the elements, ascending order (smallest value first). For descending order, use the `reverse` parameter.|
+|reverse()|Reverses the order of a list.|
+|count(*value*)|Returns the number of occurrences of value.|
+|index(*value*)|Returns the first position number of where value occurs.|
+|insert(*i*, *value*)|Inserts value at position i.|
+|pop([*i*])|Returns value at position *i* and removes value from the list.|
+|remove(value)|Removes the first occurrence of value from the list.|
+
+## 5.2 When to use tuples and when to use lists
+
+Lists can do everything tuples can and even more, since they are mutable sequences. But these are some of the 
+advantages of tuples over lists:
+
+1. **Tuples are faster than lists**: Because the computer knows they won't change. For simple programs this might not
+make a difference but for larger problems it could be very useful.
+
+2. **Safety and clarity**: Tuples are immutable, which makes them perfect for creating constants. This can add a 
+level of safety and clarity to your code.
+
+3. **Sometimes tuples are required**: For example, Python with certain functions or types requires immutable sequences.
+
+But since lists are so flexible, it's probably best to use them rather than tuples the majority of the time.
+
+## 5.3 Nested sequences
+
+List and tuples are sequences of any type, this means that lists and tuples can contain other tuples and lists, this 
+is what we refer to when we talk about **nested sequences**. Nested sequences are sequences inside other sequences.
+
+### 5.3.1 Creating nested sequences
+
+Creating nested sequences is done following the same rules we defined in previous chapters, for example:
+
+```python
+>>> ex_list = ["S1", ("S2", "S3"), ["S4", "S5", "S6"]]
+>>> print(ex_list[0])
+S1
+>>> print(ex_list[1])
+('S2', 'S3')
+>>> print(ex_list[2])
+['S4', 'S5', 'S6']
+```
+
+As you can see, the list `ex_list` has three elements:
+
+1. The string `"S1"`.
+2. The tuple with two elements: `("S2", "S3")`.
+3. The list with three elements: `["S4", "S5", "S6"]`.
+
+It is more common to find nested sequences that follow a consistent pattern, like this:
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> print(ex_list[0])
+('Carlsberg', 2)
+```
+
+Also, you can create nested sequences inside nested sequences many times, however it can be confusing even for 
+experienced programmers, usually you won't need more than one level of nesting. This is an example of four levels of 
+nesting:
+
+```python
+crazy_tuple = ("T1", ("T2", ("T3" , ("T4", "T4"))))
+```
+
+### 5.3.2 Accessing nested elements
+
+You access elements of a nested sequence just like with any other sequence, through indexing:
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> print(ex_list[0])
+('Carlsberg', 2)
+```
+
+In case you want to access the element of a nested sequence, you can use an intermediate variable:
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> var = ex_list[0]
+>>> print(var[0])
+Carlsberg
+```
+
+Or you can use multiple indexing to access an element directly:
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> print(ex_list[0][0])
+Carlsberg
+```
+
+A more elaborated example of multiple indexing is the following, in this case, we are using a nested sequence with 
+four levels of nesting (the same as in the previous paragraph):
+
+```python
+>>> crazy_tuple = ("T1", ("T2", ("T3" , ("T4", "T4"))))
+>>> print(crazy_tuple[0])
+T1
+>>> print(crazy_tuple[1])
+('T2', ('T3', ('T4', 'T4')))
+>>> print(crazy_tuple[1][0])
+T2
+>>> print(crazy_tuple[1][1])
+('T3', ('T4', 'T4'))
+>>> print(crazy_tuple[1][1][0])
+T3
+>>> print(crazy_tuple[1][1][1])
+('T4', 'T4')
+>>> print(crazy_tuple[1][1][1][0])
+T4
+>>> print(crazy_tuple[1][1][1][1])
+T4
+```
+
+## 5.4 Unpacking a sequence
+
+Unpacking means assigning each element of a sequence to a different variable, it works with any type of sequence and 
+the number of elements in the sequence must be the same as the number of variables, otherwise an error is generated.
+
+```python
+>>> ex_list = [("Carlsberg", 2), ("Amstel", 4), ("Mahou", 10)]
+>>> beer_name, beer_amount = ex_list[2]
+>>> print(beer_name)
+Mahou
+>>> print(beer_amount)
+10
+```
+
+## 5.5 Shared references
+
+A variable refers to a value, this means that the variable doesn't store a copy of the value but just refers to the 
+place in the computer's memory where the value is stored. For immutable types, this is not very important, but for 
+mutable types, it is.
+
+```python
+# In this example, var refers to the location in memory where the string "Hey" is stored.
+var = "Hey"
+```
+
+When several variable refer to the same mutable value, **they share the same reference**, which means that a change 
+to that value through any of the variables means the value changes for all the variables. This can be better 
+explained with an example:
+
+```python
+>>> beer_0 = ["Carlsberg"]
+>>> beer_1 = beer_0
+>>> beer_2 = beer_0
+>>> beer_0[0] = "Soda"
+>>> print(beer_0)
+['Soda']
+>>> print(beer_1)
+['Soda']
+>>> print(beer_2)
+['Soda']
+```
+
+The important thing to note is to be aware of shared references when using mutable values, as if you change the value
+through one of the variables, it will change for all of the variables. You can avoid this effect by just making a 
+copy of the mutable object, one way to achieve it is by slicing:
+
+```python
+>>> beer_0 = ["Carlsberg"]
+>>> beer_1 = beer_0[:]
+>>> beer_2 = beer_0[:]
+>>> beer_0[0] = "Soda"
+>>> print(beer_0)
+['Soda']
+>>> print(beer_1)
+['Carlsberg']
+>>> print(beer_2)
+['Carlsberg']
+```
+
+## 5.6 Dictionaries
+
+Lists and tuples let your organize things into sequences, with *dictionaries* you store information in pairs. 
+Compared to real dictionaries, where you look up a word to get its definition, in Python you look up a `key` and its 
+`value`.
+
+### 5.6.1 Creating a dictionary
+
+To creaet a dictionary, you have to write a `key`, followed by a colon, followed by a `value`, all of this creates a 
+dictionary `item`, you separate `items` with commas and enclosed all of them in curly brackets to create a dictionary
+. As an example, the following code creates a dictionary:
+
+```python
+ex_dic = {0 : "Zero", 1 : "One", 2 : "Two", 3 : "Three", 4 : "Four", 5 : "Five"}
+```
+
+This code creates a dictionary of six pairs, called `items`. Each item is made of a `key` and a `value`, `keys` are on 
+the left side of the colons and the `values` are on the right side of the colons. The table below serves as more 
+clarification:
+
+|Items|Keys|Values|
+|:----:|:----:|:----:|
+|0 : "Zero"|0|"Zero"|
+|1 : "One"|1|"One"|
+|2 : "Two"|2|"Two"|
+|3 : "Three"|3|"Three"|
+|4 : "Four"|4|"Four"|
+|5 : "Five"|5|"Five"|
+
+### 5.6.2 Operations with dictionaries
+
+To add an `item` to a dictionary, you do the following:
+
+```python
+>>> ex_dic = {"Carlsberg" : "Tesco", "Mahou" : "Asda", "Estrella" : "Cooperative Food"}
+>>> ex_dic["Bavaria"] = "Sansburys"
+>>> print(ex_dic)
+{'Carlsberg': 'Tesco', 'Estrella': 'Cooperative Food', 'Bavaria': 'Sansburys', 'Mahou': 'Asda'}
+```
+
+In case you attempt to do this with an already existing `key`, you replace the `value` associated with that `key`, 
+for example:
+
+```python
+>>> ex_dic = {"Carlsberg" : "Tesco", "Mahou" : "Asda", "Estrella" : "Cooperative Food"}
+>>> ex_dic["Estrella"] = "Spar"
+>>> print(ex_dic)
+{'Carlsberg': 'Tesco', 'Estrella': 'Spar', 'Mahou': 'Asda'}
+```
+
+To delete an item from a dictionary, you can use the `del` keyword, for example:
+
+```python
+del ex_dic["Carlsberg"]
+```
+
+It's important to note that trying to delete a dictionary item through a key that doesn't exist will give you an 
+error, so it's better to know if the key you're using exists or not.
+
+### 5.6.3 Accessing dictionary values
+
+There are many ways to access a dictionary value. The most direct one is to use the `key` to retrieve the value, to 
+get the `value` associated to a `key`, write they `key` in brackets right to the name of the dictionary, similar 
+syntax to indexing, for example:
+
+```python
+>>> ex_dic = {"Carlsberg" : "Tesco", "Mahou" : "Asda", "Estrella" : "Cooperative Food"}
+>>> ex_dic["Carlsberg"]
+'Tesco'
+```
+
+In case you write a `key` that doesn't exist in the dictionary, python will return an error. In order to avoid this, 
+you can use the `in` operator to check if the `key` is in the dictionary before trying to use to to access the 
+`value`, for example:
+
+```python
+if "Carlsberg" in ex_dic:
+  print("This is printed")
+else:
+  print("This is not printed")
+```
+
+Keep in mind that this only tests for `keys` in the dictionary, it doesn't check for values. Accessing through the 
+`key` to the `value` looks similar to indexing, but it's important to note that dictionaries do not have position 
+numbers and therefore indexing will give an error.
+
+You can use the built-in method `get()` of dictionaries to get the value associated to a key without fear of writing 
+a `key` that doesn't exist as this method has safety for those scenarios, for example:
+
+```python
+>>> ex_dic = {"Carlsberg" : "Tesco", "Mahou" : "Asda", "Estrella" : "Cooperative Food"}
+>>> ex_dic.get("Carlsberg")
+'Tesco'
+>>> ex_dic.get("Amstel", "Will return this if key not found")
+'Will return this if key not found'
+```
+
+If you specify a second argument for the `get()` method, it will return that argument if the `key` specified doesn't 
+exist in the dictionary. If you don't supply a second argument and the `key` specified doesn't exist in the 
+dictionary, the return value will be `None`.
+
+### 5.6.4 Accessing dictionary keys
+
+It's not possible to access dictionary keys through the values, that's all there is to it.
+
+### 5.6.5 Dictionary requirements
+
+These are things to keep in mind when using dictionaries:
+
+1. **A dictionary can't contain multiple items with the same key**.
+2. **Keys have to be immutable**
+3. **Values don't have to be unique, they can be mutable or immutable.**
+
+### 5.6.6 Dictionary summary of operations
+
+The following table describes the most common dictionary methods:
+
+|Methods|Description|
+|:----:|:----:|
+|get(key, [default])|Returns the value of `key` if it exists, otherwise the optional `default` is returned, or `None`.|
+|keys()|Returns a view of all the keys in a dictionary.|
+|values()|Returns a view of all the values in a dictionary.|
+|items()|Returns a view of all the items in a dictionary.|
+
+As you can see, we have introduced a new concept, `views`, views are dependent to the dictionary (If the dictionary 
+changes the view will also change) and they can be iterated over with a `for` loop for example. As with dictionaries,
+they can't be indexed.
+
+# 6. Functions
+
+**Functions** are ways to break up big programs into smaller and more manageable pieces of code. You will learn to do
+the following:
+
+- Write your own functions
+- Accept values into your functions through parameters
+- Return information from your functions through return values
+- Work with global variables and constants
+- Create a computer opponent that plays a strategy game
+
+## 6.1 Creating functions
+
+The functions `len()` and `range()` are examples of built-in functions, Python lets you create your own functions so 
+you can better manage your code. Functions should do one job well.
+
+By creating and using functions you using what is known as *abstraction*. It lets you think about the big picture 
+without worrying about the details. 
+
+A principal of *abstraction* is the *encapsulation*, in a function, no variable you create inside or any of its 
+parameters can be accessed outside of the function, this is encapsulation, this helps keep independent code separated
+and only the information that is needed by the function is passed and only information that is needed by the program 
+is returned.
+
+Another great thing about functions is that they can be *reused*, functions you write for some projects can be used 
+in another projects as well, so writing good functions can save you time in your current projects and future 
+projects, for more information about *software reuse*, read **Note 15**.
+
+It's important to note that functions can be grouped into modules, that can be imported into your programs.
+
+## 6.2 Defining a function
+
+To define a function you use the `def` keyword, followed by your function name, and by a pair of parentheses with the
+arguments enclosed, followed by a colon and by an indented block of statements. Naming functions follows the same 
+rules as naming variables, you should try to use names that describe what the function does.
+
+```python
+def ex_function():
+  print("This is an example function.")
+```
+
+The line with the `def` keyword and the block that follows are called a *function definition*. They define what the 
+function does but no code is executed.
+
+To call a function, you use a pair of parentheses, like this:
+
+```python
+>>> ex_function()
+this is an example function
+```
+
+## 6.3 Documenting a function
+
+Functions can be documented with what is called a documentation string, called a *docstring*, this is just a triple 
+quoted string that must be the first line of the function. It appears in the interactive documentation in some IDEs.
+
+```python
+def ex_function():
+  """ This is just an example function that prints a predefined text """
+  print("this is an example function")
+```
+
+Now if I type `help(ex_function)`, in the command line I get the triple quoted string as a result, specifically:
+
+```python
+>>> help(ex_function)
+Help on function ex_function:
+
+ex_function()
+    This is just an example function that prints a predefined text
+```
+
+## 6.4 Function parameters
+
+Parameters are basically variables names inside the parentheses in a function, for example in this case:
+
+```python
+def ex_function(param1, param2):
+  print("Param one value is : " + str(param1) + "\nParam two value is : " + str(param2))
+```
+
+In this case, `param1` and `param2` are *parameters*. Parameters exist only through the function and they are 
+assigned the value of the arguments when a function is called, following from our previous example:
+
+```python
+>>> ex_function(1, "One")
+Param one value is : 1
+Param two value is : One
+```
+
+## 6.5 Return values
+
+Functions that return values make use of the `return` statement, for example:
+
+```python
+def ex_function(param1, param2):
+  sum = param1 + param2
+  return sum
+```
+
+When a `return` line runs, the function passes the value to the part of the program that called it, and the function 
+ends. So, a call to the function above results in the following:
+
+```python
+>>> ex_function(1, 2)
+3
+```
+
+You can pass more than one return value in a function, but make sure that you have enough variables to store the 
+returned information, for example:
+
+```python
+def ex_function(param1, param2):
+  sum = param1 + param2
+  return sum, param1, param2
+
+>>> sum, param1, param2 = ex_function(1, 2)
+>>> print(sum, param1, param2)
+3 1 2
+```
+
+If there are not enough variables to store the returned values, an error will be generated.
+
+## 6.6 Keyword arguments and default parameter values
+
+When you just list parameters separated by commas in a function definition, you create *positional parameters*, for 
+example:
+
+```python
+def ex_function(param1, param2):
+  print(param1, param2)
+```
+
+When you call this function, with just arguments separated by commas, you create *positional arguments*, following 
+from the previous example:
+
+```python
+>>> ex_function("arg1", "arg2")
+arg1 arg2
+```
+
+*Positional arguments* and *positional parameters* are what we have defined so far, when these two are positional, it
+means that the value of the parameters depends on the position of the arguments sent, the first parameter is assigned
+the first argument, the second parameter is assigned the second argument... and so on.
+
+Another possibility is to use keyword arguments, in this case you use the parameter names from the function 
+definition to assign the value of the parameters, you can change the order of the assignments if you wish, for example:
+
+```python
+>>> ex_function(param1 = "arg1", param2 = "arg2")
+arg1 arg2
+>>> ex_function(param2 = "arg2", param1 = "arg1")
+arg1 arg2
+```
+
+By using the parameter names you give clarity to your code, however it might get unnecesary long.You can combine both 
+forms, but it is not advisable, as it gets tricky and confusing.
+
+Finally, you can create parameters that are assigned default values in case they aren't assigned any values, for this
+you just need to modify the function definition like this:
+
+```python
+def ex_function(param1, param2 = "No value passed for param2"):
+  print(param1, param2)
+```
+
+Now, when you call the function, you can omit the second argument:
+
+```python
+>>> ex_function("arg1")
+arg1 No value passed for param2
+>>> ex_function("arg1", "arg2")
+arg1 arg2
+```
+
+It's important to note that once you define a parameter as a default parameter, all the parameters that follow must 
+be default parameters as well, otherwise Python will generate an error. Default parameters are useful when a function
+gets called many times with the same one or more parameters.
+
+## 6.7 Using global variables and constants
+
+There is another way you can share information with functions other than parameters and return values, and these are 
+global variables.
+
+### 6.7.1 Scopes
+
+*Scopes* represent the different areas of your program that are separate from each other. A program gets 
+automatically a *global* scope, variables defined within this scope are called *global variables*, they can be 
+accessed from anywhere within that scope.
+
+When you create a function, you create another scope, variables defined within the function are only accessible in 
+the scope of the function, these are *local variables* and, in this case, local to the function, however, global 
+variables can still be accessed from inside the function.
+
+### 6.7.2 Global variables and functions
+
+As mentioned earlier, global variables can be accessed from inside a function, you can read its value but you can't 
+change it directly, for example this code will work:
+
+```python
+global_var = 10
+
+def ex_function():
+  print(global_var)
+```
+
+But this one will not:
+
+```python
+global_var = 10
+
+def ex_function():
+  global_var = 5
+```
+
+For this last code to work, you need to use the `global` keyword inside the function, this way you it gains full 
+access to the variable, this is the solution:
+
+```python
+global_var = 10
+
+def ex_function():
+  global global_var
+  global_var = 5
+```
+
+It's important to note that if you create inside a function a local variable with the same name as a global variable,
+the local variable has preference, this means that you *shadow* the global variable, the operations you do on the 
+variable only affect the local variable inside the function.
+
+### 6.7.3 When to use global variables and constants
+
+Global variables make programs confusing, because its hard to keep track of where the global variable might change, 
+on the other hand, global constants make the program gain clarity, for example, imagine a program where you have to 
+use in many places a constant value, instead of repeating it over and over, you can just use a global constant.
+
+# 7. Files and exceptions
+
+In this chapter you will learn how to use files for permanent storage and how to handle errors that your code may 
+generate. Specifically, you will learn to do the following:
+
+- Read from text files
+- Write to text files
+- Read and write more complex data with files
+- Intercept and handle errors during a program's execution
+
+## 7.1 Opening and closing a file
+
+The first step to work with a file is to open it, using the `open()` function. This function takes two arguments, the 
+first one is path to the file. Python first looks in the current directory for the file if no full path is specified.
+
+The second one is the access permisions, which can be any from the following table:
+
+|Mode|Description|
+|:------:|:------:|
+|"r"|Read from a text file. If the file doesn't exist, Python will complain with an error|
+|"w"|Write to a text file. If the file exists, its contents are overwritten. If the file doesn't exist, it's created.|
+|"a"|Append a text file. If the file exists, new data is appended to it. If the file doesn't exist, it's created.|
+|"r+"|Read from and write to a text file. If the file doesn't exist, Python will complain with an error.|
+|"w+"|Write to and read from a text file. If the file exists, its contents are overwritten. If the file doesn't exist, it's created|
+|"a+"|Append and read from a text file. If the file exists, new data is appended to it. If the file doesn't exist, it's created.|
+
+This function then returns a `file` object, which includes many useful methods. This is an example of opening a file:
+
+```python
+>>> text_file = open("text_file.txt", "r")
+```
+
+Once you finish working with a file, it's a good programming practice to close it, you can do it with the following 
+method of the `file` object.
+
+```python
+>>> text_file.close()
+```
+
+## 7.2 Reading from a text file
+
+It's easy to read strings from 'plain text files', they are the same under Windows, Mac or Unix and these operating 
+systems come with tools to edit them.
+
+### 7.2.1 Reading characters from a file
+
+To read characters from a file you use the `read()` method of a `file` object, the `read()` method accepts one 
+argument which tells it the number of characters to read from the file, if this parameter is not specified, the whole
+file will be returned as a string:
+
+```python
+>>> route = "dat.txt"
+>>> file_obj = open(route, "r+")
+>>> print(file_obj.read(4))
+Firs
+>>> print(file_obj.read(4))
+t li
+>>> file_obj.close()
+```
+
+It is important to note that each time you use the `read()` method the read pointer advances the same number of 
+positions as the amount of characters read, to reset the pointer, you can close and open the file again using the 
+functions seen before. Any subsequent reads after there is no more data to read will just return the empty string.
+
+### 7.2.2 Reading characters from a line
+
+Sometimes you just want to work with lines, for this you use the `readline()` method. In this method, you specify the
+number of characters you want to read from the current line, as before, if you don't pass a number it will return the
+whole line.
+
+```python
+>>> route = "dat.txt"
+>>> file_obj = open(route, "r+")
+>>> print(file_obj.readline(4))
+Firs
+>>> print(file_obj.readline(100))
+t line
+
+>>> print(file_obj.readline(100))
+Second line
+
+>>> file_obj.close()
+```
+
+As you can see, once a complete line has been read, it continues with the next line.
+
+### 7.2.3 Reading all the lines into a list
+
+You can read all the lines from a file and create a list with them using hte `readlines()` method. Each line becomes 
+a string object inside the list, for example:
+
+```python
+>>> route = "dat.txt"
+>>> file_obj = open(route, "r+")
+>>> print(file_obj.readlines())
+['First line\n', 'Second line\n', 'Third line\n']
+>>> file_obj.close()
+```
+
+### 7.2.4 Looping through a file
+
+When using a `file` object as a condition in a loop, it returns the lines of the associated text file in succession, 
+for example:
+
+```python
+>>> route = "dat.txt"
+>>> file_obj = open(route, "r+")
+>>> for a in file_obj:
+...     print(a)
+...     
+First line
+
+Second line
+
+Third line
+>>> file_obj.close()
+```
+
+## 7.3 Writing to a text file
+
+There are two basic ways to write strings to a text file.
+
+### 7.3.1 Writing strings to a file
+
+Just as before, the file needs to be opened with correct access permissions, then you use the `write()` operator to 
+write strings to the file:
+
+```python
+>>> route = "tad.txt"
+>>> file_obj = open(route, "w")
+>>> file_obj.write("Write this, and just this")
+>>> file_obj.close()
+```
+
+As you write things on the file, the write pointer advances. You can also use the `writelines()` method to write a list
+of strings to the file, this will be written in succession:
+
+```python
+>>> route = "tad.txt"
+>>> file_obj = open(route, "w")
+>>> list = ["This is a text", "This is another text", "How surprising, this is more text"]
+>>> file_obj.writelines(list)
+>>> file_obj.close()
+```
+
+## 7.4 Reading and writing to a text file summary
+
+This table summarizes every method seen regarding writing to and reading from a text file:
+
+|Method|Description|
+|:----|:----|
+|`close()`|Closes the file. A closed file cannot be read from or written to until opened again.|
+|`read([size])`|Reads *size* characters from a file and returns them as a string. If size is not specified, the method returns all of the characters from the current position to the end of the file.|
+|`readline([size])`|Reads size characters from the current line in a file and returns them as a string. If size is not specified, the method returns all of the characters from the current position to the end of the file.|
+|`readlines()`|Reads all of the lines in a file and returns them as elements in a list.|
+|`write(output)`|Writes the string output to a file.|
+|`writelines(output)`|Writes the strings in the list output to a file.|
+
+## 7.5 Storing data in binary files
+
+Python allows to store complex data in a single file that you can retrieve later, for examples lists or dictionaries.
+
+There are two modules that are important regarding this:
+
+- The *pickle* module allows you to preserve and store complex data in a file.
+- The *shelve* module allows you to store and randomly access pickled objects in a file.
+
+### 7.5.1 Pickling data and writing/reading to a file
+
+Pickling is very similar to writing characters to a file, but instead of characters you write objects and retrieve 
+them sequentially from the file. For this to work, the file must be opened as a binary file, using any of the 
+following parameters as the access mode:
+
+|Mode|Description|
+|:----|:----|
+|"rb"|Read from a binary file. If the file doesn't exist, Python will complain with an error.|
+|"wb"|Write to a binary file. If the file exists, its contents are overwritten. If the file doesn't exist, it's created.|
+|"ab"|Append a binary file. If the file exists, new data is appended to it. If the file doesn't exist, it's created.|
+|"rb+"|Read from and write to a binary file. If the file doesn't exist, Python will complain with an error.|
+|"wb+"|Write to and read from a binary file. If the file exists, its contents are overwritten. If the file doesn't exist, it's created.|
+|"ab+"|Append and read from a binary file. If the file exists, new data is appended to it. If the file doesn't exist, it's created.|
+
+The *pickle* module has a method called *dump()*, which can be used to write complex data to a binary file, this 
+function requires two arguments, the data to pickle and the file object associated to the file where to store it. As 
+an example:
+
+```python
+import pickle
+
+file_loc = "C:\\Users\\Diego\\Desktop\\Learning Python\\Chapter 6 - Functions\\tad.txt"
+file_obj = open(file_loc, "wb+")
+
+ex_list = ["List 1", "List 2", "List 3"]
+ex_tuple = ("Tuple 1", "Tuple 2", "Tuple 3")
+ex_dic = {"Key 1": 40, "Key 2": 50, "Key 3": 60} 
+
+pickle.dump(ex_list, file_obj)
+pickle.dump(ex_tuple, file_obj)
+pickle.dump(ex_dic, file_obj)
+file_obj.close()
+```
+
+To read these elements, you use the `load()` method of the *pickle* module, it retrieves the pickled elements 
+sequentially. Following from our previous example:
+
+```python
+>>> import pickle
+>>> file_loc = "tad.txt"
+>>> file_obj = open(file_loc, "rb+")
+>>> ex_list = pickle.load(file_obj)
+>>> ex_tuple = pickle.load(file_obj)
+>>> ex_dic = pickle.load(file_obj)
+>>> file_obj.close()
+['List 1', 'List 2', 'List 3']
+>>> print(ex_list)
+>>> print(ex_tuple)
+('Tuple 1', 'Tuple 2', 'Tuple 3')
+>>> print(ex_dic)
+{'Key 2': 50, 'Key 3': 60, 'Key 1': 40}
+```
+
+This table is a summary of what we have seen regarding pickling data:
+
+|Function|Description|
+|:------|:------|
+|`dump(object, file, [,bin])`|Writes pickled version of `object` to `file`. If `bin` is `True`, `object` is written in binary format. If `bin` is `False`, it is written in a less efficient but readable format. The default value for this parameter is false.|
+|`load(file)`|Unpickles and returns the next pickled object in `file`.|
+
+### 7.5.2 Random access and pickling
+
+Using the `shelve` module, you can randomly access pickled data. You creata `shelf` that acts like a dictionary, but 
+with pickled objects and files.
+
+Instead of the `open()` function, you use the `open()` method of the `shelve` module. This method takes two 
+arguments, first the file location and then the access mode, which can be one of the following:
+
+|Mode|Description|
+|:-----|:-----|
+|`"c"`|Open a file for reading or writing, if the files doesn't exist, it's created.|
+|`"n"`|Create a new file for reading or writing, if the file exists, its contents are overwritten.|
+|`"r"`|Read from a file. If the file doesn't exist, Python will complain with an error.|
+|`"w"`|Write to a file. If the file doesn't exist, Python will complain with an error.|
+
+By default, the access mode is `"c"`. This is an example on how to use a `shelf`:
+
+```python
+>>> import shelve
+>>> file_loc = "asd.txt"
+# Create the shelf.
+>>> s = shelve.open("file_loc", "n")
+# Add key : value pairs to the shelf.
+>>> s["Colours"] = ("Red", "White", "Black")
+>>> s["Feelings"] = ["Angry", "Happy", "Deluded"]
+>>> s["Sports"] = {"Football": "Real Madrid", "Basketball": "Lakers"}
+# Write everything to the file.
+>>> s.sync()
+# Retrieve a random object from the file using the key.
+>>> ex_feelings = s["Feelings"]
+>>> print(ex_feelings)
+['Angry', 'Happy', 'Deluded']
+# Close the file.
+>>> s.close()
+```
+
+Regarding the `sync()` method, it is used to flush the buffer of data to the file, otherwise it is done periodically. 
+When calling the `close()` method, the same effect is achieved.
+
+It is important to note that when opening a file with the `open()` method of the shelve module, Python might add an 
+extension to the file and create additional files, this behaviour is normal. Also, shelf keys can only be strings.
+
+## 7.6 Exceptions
+
+When Python runs into an error, it raises an **exception**. If nothing is done with the exception, it stop what it's 
+doing and displays an error message detailing the exception.
+
+With Python exception handling, you can catch and handle exceptions so that your program doesn't crash.
+
+### 7.6.1 The try statement
+
+The most basic way to handle exceptions is to use the *try* statement along with the *except* clause. You use the 
+*try* statement for statements that can raise an exception, for example statements that involve external interaction,
+and if an exception is raised, the except clause's associated block of statements is executed. This is an example of 
+the try statement:
+
+```python
+num = A
+try:
+  num_f = float(num)
+except:
+  print("Something went wrong when converting to float.")
+```
+
+In this code, the *except* clause covers all the exceptions that might be raised, this is usually not a good 
+programming practice, each exception should be handled individually. 
+
+### 7.6.2 Exception types
+
+There are many different kinds of exceptions, some are summarized in the following table:
+
+|Exception Type|Description|
+|:-----:|:-----|
+|`IOError`|Raised when an I/O operation fails, such as when an attempt is made to open a nonexistent file in read mode.|
+|`IndexError`|Raised when a sequence is indexed with a number of a nonexistent element.|
+|`KeyError`|Raised when a dictionary key is not found.|
+|`NameError`|Raised when a name of an object is not found.|
+|`SyntaxError`|Raised when a syntax error is encountered.|
+|`TypeError`|Raised when a built-in operation or function is applied to an object of inappropriate type.|
+|`ValueError`|Raised when a built-in operation or function receives an argument that has the right type but an inappropriate value.|
+|`ZeroDivisionError`|Raised when the second argument of a division or module operation is zero.|
+
+The *except* clause allows the programmer to catch certain types of exceptions, for example and following from our 
+previous piece of code:
+
+```python
+num = A
+try:
+  num_f = float(num)
+except ValueError:
+  # We can be more specific about what to print, since we are handling a particular type of exception.
+  print("The value that you tried to convert is invalid.")
+```
+
+You can also handle multiple exception types with just an *except* clause separating them by commas and enclosing in 
+parentheses (like a tuple):
+
+```python
+num = A
+try:
+  num_f = float(num)
+except (TypeError, ValueError):
+  print("The value that you tried to convert is invalid.")
+```
+
+Or you can just write multiple exception clauses for the different exceptions you want to handle, there is no limit 
+to the number of except clauses in a try statement.
+
+### 7.6.3 Treating an exception as an argument
+
+You can get the value of an exception using the `as` keyword in an `except` clause, following from our previous code:
+
+```python
+num = A
+try:
+  num_f = float(num)
+except ValueError as ex_exception:
+  print("This is what the exception has to say: ")
+  print(ex_exception)
+```
+
+The associated value to an exception is usually a text describing the exception.
+
+### 7.6.4 The else clause
+
+You can use the `else` clause in try statements to execute a block of statements in case no exception was raised, 
+following from our previous example:
+
+```python
+num = A
+try:
+  num_f = float(num)
+except ValueError:
+  print("The value that you tried to convert is invalid.")
+except TypeError:
+  print("There was an error in the types while converting.")
+else:
+  print("Everything went fine, change the variable num to a number and I will be printed".)
+```
+
+So, the block of statements of the `else` clause will be executed only if the try block of statements is successful.
+
+# 8. Software objects
+
+This chapter is about **Object-oriented programming (OOP)**, the basic building block of this methodology are 
+software objects, often just called as objects. In this chapter your will learn the following:
+
+- Create classes to define objects
+- Write methods and create attributes for objects
+- Instantiate objects from classes
+- Restrict access to an object's attributes
+
+## 8.1  Object oriented basics
+
+OOP allows you to represent things in your programs in a way that's more like the real world.
+
+Like their real life counterparts, software objects combine characteristics (**attributes**) and behaviours 
+(**methods**), for example, think of a tank. A tank's attributes could be its health or movement speed, and its 
+methods could be the ability to move or to fire its weapon.
+
+Objects are created, or **instantiated** in the OOP jargon, from **classes**, these are just pieces of code that 
+assign attributes and methods. Classes are the designs for objects, but not actual objects. Objects (**Instances**) 
+can be instantiated from classes and these will have a similar basic structure, but you can give each instance its 
+own uniqueness, for example, two instances of the tank class with each with a different kind of weapon.
+
+## 8.2 Creating classes, methods and objects
+
+To define a **class**, you use the `class` keyword in python, followed by the class name (by convention, it should 
+start with a capital letter) and, enclosed in parentheses, the class in which the class you create should be based on
+. You can also add a triple quoted string, a docstring, to document the class. This is an example of a class definition:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+```
+
+Here, I decided to base my class on `object`, which is a fundamental built-in type.
+
+To add a method to our class, we define it inside the class just like a function, using the `def` keyword. It's 
+important to note that every method in a class must have at least one parameter, called **self** by convention, and 
+this parameter must be the first positional parameter of the method. This parameter provides a way for the method to 
+refer to object itself. Following from our previously created class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data.")
+```
+
+If you create an method without parameters, you will receive an error when invoking it.
+
+After having a class defined, you can create an instance of it and assign it to a variable with just a single line:
+
+```python
+ex_class = MyClass()
+```
+
+Notice the pair of parentheses after the class name. While tempting for many programmers, it's usually good practice not
+to name the variable where the instance will be stored with the same name as the class in lowercase letters as it 
+will only lead to confusion.
+
+And, to invoke, the method we created before, we just use dot notation, notice that no argument is passed to `self`:
+
+```python
+>>> ex_class.print_data()
+This method has been invoked: print_data.
+```
+## 8.3 Constructors
+
+A **constructor** is just an special type of method that is invoked right after an object is created. It's usually 
+used to set the initial attribute values of an object. The constructor method is also called the *initialization* 
+method.
+
+This method has a predefined name, `__init__`, we will add an initialization method to our class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  def __init__(self):
+    """ This is the initialization method. """
+    print("Object of type MyClass created.")
+  
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data.")
+```
+
+Now, each time we create an object, the initialization method will be executed:
+
+```python
+>>> ex_class0 = MyClass()
+Object of type MyClass created.
+>>> ex_class1 = MyClass()
+Object of type MyClass created.
+```
+
+## 8.4 Attributes
+
+Through constructors, you can initialize the attributes of a class. This is a very useful and common practice.
+
+To create and initialize attributes, you use the `self` parameter we talked about before, this parameter is basically
+a reference to the object invoking the method. In the following code, we create the attribute `name`:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  def __init__(self, name):
+    """ This is the initialization method. """
+    self.name = name
+    print("Object of type MyClass created. Name: " + self.name)
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data. The name of the object is: " + self.name)
+```
+
+Notice that we have also changed the `print_data` function to include the name in the printed string. With the code 
+above, we can create instantiate objects from it as follows:
+
+```python
+# Create object with name "First Class".
+>>> ex_class0 = MyClass("First Class")
+Object of type MyClass created. Name: First Class
+# Create object with name "Second Class".
+>>> ex_class1 = MyClass("Second Class")
+Object of type MyClass created. Name: Second Class
+>>> ex_class0.print_data()
+This method has been invoked: print_data. The name of the object is: First Class
+>>> ex_class1.print_data()
+This method has been invoked: print_data. The name of the object is: Second Class
+```
+
+By default, you can access object attributes directly using the dot notation and the name of the attribute, however, 
+this is usually not the intended behaviour, in later sections we will see how to use *encapsulation* to avoid this. 
+This is an example of accessing the attribute we just created using dot notation:
+
+```python
+>>> ex_class1.name
+'Second Class'
+```
+
+## 8.5 Printing objects you create
+
+If you attempt to print, for example, the class defined above, you will see that Python returns something that you 
+probably don't expect. You need to define the special method `__str__` in the class. This method returns a string 
+that will get printed when you call the `print()` function with the object as an argument.
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  def __init__(self, name):
+    """ This is the initialization method. """
+    self.name = name
+    print("Object of type MyClass created. Name: " + self.name)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data. The name of the object is: " + self.name)
+```
+
+Now you can print the object as usual:
+
+```python
+>>> ex_class0 = MyClass("First_Class")
+Object of type MyClass created. Name: First_Class
+>>> print(ex_class0)
+Object of type MyClass
+Name: First_Class
+```
+
+## 8.6 Class attributes
+
+**Class attributes** are single values associated to a class itself, not to instances. There is only one copy of it, 
+no matter how many times you instantiate the class.
+
+To create a class attribute, you create a variable inside a class and outside of any of its methods, and assign it an
+initial value. This assignment is only performed once and as soon as Python sees the class definition, this means you
+can use the class attribute of a class even before you create any instances of it. Following with our defined class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name):
+    """ This is the initialization method. """
+    self.name = name
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data. The name of the object is: " + self.name)
+```
+
+The *class attribute* `total` keeps track of the objects instantiated of this class. You can access the *class 
+attribute* through the class or any of the objects using dot notation. However, you can only modify its value 
+accessing through the class.
+
+```python
+>>> print(MyClass.total)
+0
+>>> ex_class0 = MyClass("First_Class")
+Object of type MyClass created. Name: First_Class
+>>> print(MyClass.total)
+1
+>>> print(ex_class0.total)
+1
+>>> MyClass.total = 5
+>>> print(MyClass.total)
+5
+>>> print(ex_class0.total)
+5
+```
+
+## 8.7 Static methods
+
+**Static methods**, like class attributes, are associated with a class and are often used to work with class attributes.
+
+It's important to note that static methods do not include `self` in the parameter list, this is because static 
+methods are designed to be invoked from the class and not from the objects or instances. You create an static method 
+just like any other method but including a **decorator**, in this particular case, the decorator `@staticmethod` is 
+the one we are interested in. Let's add an static method to our class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name):
+    """ This is the initialization method. """
+    self.name = name
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  @staticmethod
+  def print_total():
+    """ Prints the total number of instances. """
+    print("Total instances: " + str(MyClass.total))
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data. The name of the object is: " + self.name)
+```
+
+Then, we call this method even if no objects of the class have been instantiated, like this:
+
+```python
+>>> MyClass.print_total()
+Total instances: 0
+>>> ex_class0 = MyClass("Random")
+Object of type MyClass created. Name: Random
+>>> MyClass.print_total()
+Total instances: 1
+```
+
+## 8.8 Object encapsulation
+
+Encapsulation with objects works in a very similar way to encapsulation with functions. The proper way to communicate
+with a function is through parameters and return values, the same happens with objects, the proper way to 
+communicate with objects is through methods and return values. In general, the application should avoid modifying 
+directly the value of an object's attribute.
+
+## 8.9 Privacy
+
+By default, all of the object's attributes and methods are *public*, this means they can be directly accessed or 
+invoked by the application. You can define methods and attributes as *private*, which means that only methods of the 
+object itself can access or invoke them, at least easily.
+
+In Python, privacy is an indicator that the attribute or method is intended only for the object's internal use, and, 
+in addition, it also helps prevent inadvertent access to such an attribute or method.
+
+### 8.9.1 Private attributes
+
+To create a *private attribute*, you just create a normal attribute with a name that begins with two underscores. 
+This tells Python that the attribute is private. In this code, we add a private attribute to our class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name, surname):
+    """ This is the initialization method. """
+    self.name = name
+    self.__surname = surname
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    print("Object of type MyClass created. Surname: " + self.__surname)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  @staticmethod
+  def print_total():
+    """ Prints the total number of instances. """
+    print("Total instances: " + str(MyClass.total))
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("The name of the object is: " + self.name)
+    print("The surname of the object is: " + self.__surname)
+```
+
+It looks like every other attribute we have defined so far, but if we try to access this attribute outside of the 
+class definition, we would get an `AttributeError`, like in this example:
+
+```python
+>>> ex_class0 = MyClass("First", "Class")
+Object of type MyClass created. Name: First
+Object of type MyClass created. Surname: Class
+>>> ex_class0.print_data()
+The name of the object is: First
+The surname of the object is: Class
+>>> ex_class0.__surname
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+AttributeError: 'MyClass' object has no attribute '__surname'
+```
+
+What Python really does is hide the attribute under a special naming convention, this means that a private attribute 
+is not totally inaccessible, however, there is no reason to do this. To access the private attribute, we could use 
+the following statement:
+
+```python
+>>> print(ex_class0._MyClass__surname)
+Class
+```
+
+### 8.9.2 Private methods
+
+**Private methods** are easily accessible by any other method in the class definition, and just like private 
+attributes, they are intended to be accessed by the object's own methods.
+
+You create a private method by writing two underscores at the beginning of its name, just like private attributes. 
+Let's try with our class definition:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name, surname):
+    """ This is the initialization method. """
+    self.name = name
+    self.__surname = surname
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    print("Object of type MyClass created. Surname: " + self.__surname)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  @staticmethod
+  def print_total():
+    """ Prints the total number of instances. """
+    print("Total instances: " + str(MyClass.total))
+    
+  def __get_full_name(self):
+    """ Returns the full name. """
+    return self.name + " " + self.__surname
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("The full name of the object is: " + self.__get_full_name())
+```
+
+An example with the code above:
+
+```python
+>>> ex_class0 = MyClass("First", "Class")
+>>> ex_class0.print_data()
+The full name of the object is: First Class
+```
+
+Python just renames a private method with a different naming convention as mentioned in the private attributes 
+section, and in this regard, it behaves the same way.
+
+### 8.9.3 When to implement privacy
+
+Make private any method that you don't want the client to invoke. If an attribute must never be accessed by the 
+application, make it private. The philosophy among many Python programmers is to trust that applications will use 
+object's methods and not its attributes.
+
+In general, when you create a class, you should follow these guidelines:
+
+- Create methods to reduce the need for clients to directly access an object's attributes.
+- Use privacy for those attributes and methods that are completely internal to the operation of objects.
+
+And, when you use an object, you should follow these guidelines:
+
+- Minimize the direct reading of an object's attributes.
+- Avoid directly altering an object's attributes.
+- Never attempt to directly access an object's private attributes or methods.
+
+## 8.10 Properties
+
+There are occasions when you want to limit the access to an attribute, but not deny its access completely. With 
+**properties**, you can manage how an attribute is accessed or changed.
+
+A property is a way to control access to a private attribute, it allows indirect access to the attribute and is 
+commonly used to impose some sort of restriction on that access.
+
+To create a property you must create a method that returns the private attribute you want to have access to, and then
+precede this method with the `@property` decorator. The property will have the same name as the method and it's 
+usually a good practice to name the property with the same name as the private attribute without the first two 
+underscores.
+
+Once you create a property as described before, you have provided read access to a private attribute. You can also 
+provide write access, even restrict it, by creating another method with the same name of the property preceded by the 
+decorator `@<name>.setter`, where `<name>` is the name of the property. When you create a setter, the paramater list 
+must include a parameter that will have the value to assign to the private attribute.
+
+Here, I have added a property along with a set method to our class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name, surname):
+    """ This is the initialization method. """
+    self.name = name
+    self.__surname = surname
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    print("Object of type MyClass created. Surname: " + self.__surname)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  @staticmethod
+  def print_total():
+    """ Prints the total number of instances. """
+    print("Total instances: " + str(MyClass.total))
+   
+  @property
+  def surname(self):
+    return self.__surname
+  
+  @surname.setter
+  def surname(self, new_surname):
+    """ Setter for the property surname """
+    if new_surname:
+      self.__surname = new_surname
+    
+  def __get_full_name(self):
+    """ Returns the full name. """
+    return self.name + " " + self.__surname
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("The full name of the object is: " + self.__get_full_name())
+```
+
+The usage of this property is as follows:
+
+```python
+>>> ex_class0 = MyClass("First", "Class")
+Object of type MyClass created. Name: First
+Object of type MyClass created. Surname: Class
+>>> ex_class0.surname
+'Class'
+# Attempt to change the surname to the empty string, the setter won't allow this.
+>>> ex_class0.surname = ""
+>>> ex_class0.surname
+'Class'
+# Change it to something else
+>>> ex_class0.surname = "Change this"
+>>> ex_class0.surname
+'Change this'
+```
+
 # 20. Notes
 
 **Note 1**: Python is case-sensitive and by convention, function names are in lowercase.
@@ -776,4 +2333,25 @@ PI = 3.1416
 **Note 14**: The keyword `None` is the equivalent to nothing in Python, it can be used to initialize variables for 
 example. As is expected, it evaluates to `False` when used as a condition.
 
+**Note 15**: Software reuse is basically not reinventing the wheel, it consists using existing software and other 
+project elements in new projects. With software reuse, you can do the following:
 
+1. Increase company productivity, by reusing code the amount of effort decreases.
+2. Improve sofware quality, tested pieces of code can be reused knowing that they are bug free.
+3. Consistency accross software products, for example sharing user interfaces can make the user feel comfortable with
+new programs right out the box.
+4. Improve software performance, once a company has a good way of doing something through software, using it again 
+saves the trouble of reinventing the wheel, or even worse, of inventing a less efficient wheel.
+
+**Note 16**: When you pass mutable values as arguments to functions be careful not to change its value (unless this is 
+intended) as the change will remain after exiting the function. This is considered a *side effect* and it is 
+generally frowned upon, you should use return values to communicate with your application.
+
+**Note 17**: If you want to terminate execution, you can call the `sys.exit()` method, which raises an exception that
+which results in the end of the program. You must import the `sys` module first.
+
+**Note 18**: Python has a collection of built-in special methods, whose names being and end with two underscores. The
+initialization method, __init__ is just an example.
+
+**Note 19**: Decorators modify the function or method they are associated to, they are written right before the 
+definition.
