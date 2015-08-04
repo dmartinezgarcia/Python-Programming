@@ -13,6 +13,7 @@ So far the repository contains notes and exercises for the following topics:
 - Chapter 5: Lists and dictionaries
 - Chapter 6: Functions
 - Chapter 7: Files and Exceptions
+- Chapter 8: Software Objects
 
 # 1. Getting Started
 
@@ -1747,6 +1748,512 @@ else:
 
 So, the block of statements of the `else` clause will be executed only if the try block of statements is successful.
 
+# 8. Software objects
+
+This chapter is about **Object-oriented programming (OOP)**, the basic building block of this methodology are 
+software objects, often just called as objects. In this chapter your will learn the following:
+
+- Create classes to define objects
+- Write methods and create attributes for objects
+- Instantiate objects from classes
+- Restrict access to an object's attributes
+
+## 8.1  Object oriented basics
+
+OOP allows you to represent things in your programs in a way that's more like the real world.
+
+Like their real life counterparts, software objects combine characteristics (**attributes**) and behaviours 
+(**methods**), for example, think of a tank. A tank's attributes could be its health or movement speed, and its 
+methods could be the ability to move or to fire its weapon.
+
+Objects are created, or **instantiated** in the OOP jargon, from **classes**, these are just pieces of code that 
+assign attributes and methods. Classes are the designs for objects, but not actual objects. Objects (**Instances**) 
+can be instantiated from classes and these will have a similar basic structure, but you can give each instance its 
+own uniqueness, for example, two instances of the tank class with each with a different kind of weapon.
+
+## 8.2 Creating classes, methods and objects
+
+To define a **class**, you use the `class` keyword in python, followed by the class name (by convention, it should 
+start with a capital letter) and, enclosed in parentheses, the class in which the class you create should be based on
+. You can also add a triple quoted string, a docstring, to document the class. This is an example of a class definition:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+```
+
+Here, I decided to base my class on `object`, which is a fundamental built-in type.
+
+To add a method to our class, we define it inside the class just like a function, using the `def` keyword. It's 
+important to note that every method in a class must have at least one parameter, called **self** by convention, and 
+this parameter must be the first positional parameter of the method. This parameter provides a way for the method to 
+refer to object itself. Following from our previously created class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data.")
+```
+
+If you create an method without parameters, you will receive an error when invoking it.
+
+After having a class defined, you can create an instance of it and assign it to a variable with just a single line:
+
+```python
+ex_class = MyClass()
+```
+
+Notice the pair of parentheses after the class name. While tempting for many programmers, it's usually good practice not
+to name the variable where the instance will be stored with the same name as the class in lowercase letters as it 
+will only lead to confusion.
+
+And, to invoke, the method we created before, we just use dot notation, notice that no argument is passed to `self`:
+
+```python
+>>> ex_class.print_data()
+This method has been invoked: print_data.
+```
+## 8.3 Constructors
+
+A **constructor** is just an special type of method that is invoked right after an object is created. It's usually 
+used to set the initial attribute values of an object. The constructor method is also called the *initialization* 
+method.
+
+This method has a predefined name, `__init__`, we will add an initialization method to our class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  def __init__(self):
+    """ This is the initialization method. """
+    print("Object of type MyClass created.")
+  
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data.")
+```
+
+Now, each time we create an object, the initialization method will be executed:
+
+```python
+>>> ex_class0 = MyClass()
+Object of type MyClass created.
+>>> ex_class1 = MyClass()
+Object of type MyClass created.
+```
+
+## 8.4 Attributes
+
+Through constructors, you can initialize the attributes of a class. This is a very useful and common practice.
+
+To create and initialize attributes, you use the `self` parameter we talked about before, this parameter is basically
+a reference to the object invoking the method. In the following code, we create the attribute `name`:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  def __init__(self, name):
+    """ This is the initialization method. """
+    self.name = name
+    print("Object of type MyClass created. Name: " + self.name)
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data. The name of the object is: " + self.name)
+```
+
+Notice that we have also changed the `print_data` function to include the name in the printed string. With the code 
+above, we can create instantiate objects from it as follows:
+
+```python
+# Create object with name "First Class".
+>>> ex_class0 = MyClass("First Class")
+Object of type MyClass created. Name: First Class
+# Create object with name "Second Class".
+>>> ex_class1 = MyClass("Second Class")
+Object of type MyClass created. Name: Second Class
+>>> ex_class0.print_data()
+This method has been invoked: print_data. The name of the object is: First Class
+>>> ex_class1.print_data()
+This method has been invoked: print_data. The name of the object is: Second Class
+```
+
+By default, you can access object attributes directly using the dot notation and the name of the attribute, however, 
+this is usually not the intended behaviour, in later sections we will see how to use *encapsulation* to avoid this. 
+This is an example of accessing the attribute we just created using dot notation:
+
+```python
+>>> ex_class1.name
+'Second Class'
+```
+
+## 8.5 Printing objects you create
+
+If you attempt to print, for example, the class defined above, you will see that Python returns something that you 
+probably don't expect. You need to define the special method `__str__` in the class. This method returns a string 
+that will get printed when you call the `print()` function with the object as an argument.
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  def __init__(self, name):
+    """ This is the initialization method. """
+    self.name = name
+    print("Object of type MyClass created. Name: " + self.name)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data. The name of the object is: " + self.name)
+```
+
+Now you can print the object as usual:
+
+```python
+>>> ex_class0 = MyClass("First_Class")
+Object of type MyClass created. Name: First_Class
+>>> print(ex_class0)
+Object of type MyClass
+Name: First_Class
+```
+
+## 8.6 Class attributes
+
+**Class attributes** are single values associated to a class itself, not to instances. There is only one copy of it, 
+no matter how many times you instantiate the class.
+
+To create a class attribute, you create a variable inside a class and outside of any of its methods, and assign it an
+initial value. This assignment is only performed once and as soon as Python sees the class definition, this means you
+can use the class attribute of a class even before you create any instances of it. Following with our defined class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name):
+    """ This is the initialization method. """
+    self.name = name
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data. The name of the object is: " + self.name)
+```
+
+The *class attribute* `total` keeps track of the objects instantiated of this class. You can access the *class 
+attribute* through the class or any of the objects using dot notation. However, you can only modify its value 
+accessing through the class.
+
+```python
+>>> print(MyClass.total)
+0
+>>> ex_class0 = MyClass("First_Class")
+Object of type MyClass created. Name: First_Class
+>>> print(MyClass.total)
+1
+>>> print(ex_class0.total)
+1
+>>> MyClass.total = 5
+>>> print(MyClass.total)
+5
+>>> print(ex_class0.total)
+5
+```
+
+## 8.7 Static methods
+
+**Static methods**, like class attributes, are associated with a class and are often used to work with class attributes.
+
+It's important to note that static methods do not include `self` in the parameter list, this is because static 
+methods are designed to be invoked from the class and not from the objects or instances. You create an static method 
+just like any other method but including a **decorator**, in this particular case, the decorator `@staticmethod` is 
+the one we are interested in. Let's add an static method to our class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name):
+    """ This is the initialization method. """
+    self.name = name
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  @staticmethod
+  def print_total():
+    """ Prints the total number of instances. """
+    print("Total instances: " + str(MyClass.total))
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("This method has been invoked: print_data. The name of the object is: " + self.name)
+```
+
+Then, we call this method even if no objects of the class have been instantiated, like this:
+
+```python
+>>> MyClass.print_total()
+Total instances: 0
+>>> ex_class0 = MyClass("Random")
+Object of type MyClass created. Name: Random
+>>> MyClass.print_total()
+Total instances: 1
+```
+
+## 8.8 Object encapsulation
+
+Encapsulation with objects works in a very similar way to encapsulation with functions. The proper way to communicate
+with a function is through parameters and return values, the same happens with objects, the proper way to 
+communicate with objects is through methods and return values. In general, the application should avoid modifying 
+directly the value of an object's attribute.
+
+## 8.9 Privacy
+
+By default, all of the object's attributes and methods are *public*, this means they can be directly accessed or 
+invoked by the application. You can define methods and attributes as *private*, which means that only methods of the 
+object itself can access or invoke them, at least easily.
+
+In Python, privacy is an indicator that the attribute or method is intended only for the object's internal use, and, 
+in addition, it also helps prevent inadvertent access to such an attribute or method.
+
+### 8.9.1 Private attributes
+
+To create a *private attribute*, you just create a normal attribute with a name that begins with two underscores. 
+This tells Python that the attribute is private. In this code, we add a private attribute to our class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name, surname):
+    """ This is the initialization method. """
+    self.name = name
+    self.__surname = surname
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    print("Object of type MyClass created. Surname: " + self.__surname)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  @staticmethod
+  def print_total():
+    """ Prints the total number of instances. """
+    print("Total instances: " + str(MyClass.total))
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("The name of the object is: " + self.name)
+    print("The surname of the object is: " + self.__surname)
+```
+
+It looks like every other attribute we have defined so far, but if we try to access this attribute outside of the 
+class definition, we would get an `AttributeError`, like in this example:
+
+```python
+>>> ex_class0 = MyClass("First", "Class")
+Object of type MyClass created. Name: First
+Object of type MyClass created. Surname: Class
+>>> ex_class0.print_data()
+The name of the object is: First
+The surname of the object is: Class
+>>> ex_class0.__surname
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+AttributeError: 'MyClass' object has no attribute '__surname'
+```
+
+What Python really does is hide the attribute under a special naming convention, this means that a private attribute 
+is not totally inaccessible, however, there is no reason to do this. To access the private attribute, we could use 
+the following statement:
+
+```python
+>>> print(ex_class0._MyClass__surname)
+Class
+```
+
+### 8.9.2 Private methods
+
+**Private methods** are easily accessible by any other method in the class definition, and just like private 
+attributes, they are intended to be accessed by the object's own methods.
+
+You create a private method by writing two underscores at the beginning of its name, just like private attributes. 
+Let's try with our class definition:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name, surname):
+    """ This is the initialization method. """
+    self.name = name
+    self.__surname = surname
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    print("Object of type MyClass created. Surname: " + self.__surname)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  @staticmethod
+  def print_total():
+    """ Prints the total number of instances. """
+    print("Total instances: " + str(MyClass.total))
+    
+  def __get_full_name(self):
+    """ Returns the full name. """
+    return self.name + " " + self.__surname
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("The full name of the object is: " + self.__get_full_name())
+```
+
+An example with the code above:
+
+```python
+>>> ex_class0 = MyClass("First", "Class")
+>>> ex_class0.print_data()
+The full name of the object is: First Class
+```
+
+Python just renames a private method with a different naming convention as mentioned in the private attributes 
+section, and in this regard, it behaves the same way.
+
+### 8.9.3 When to implement privacy
+
+Make private any method that you don't want the client to invoke. If an attribute must never be accessed by the 
+application, make it private. The philosophy among many Python programmers is to trust that applications will use 
+object's methods and not its attributes.
+
+In general, when you create a class, you should follow these guidelines:
+
+- Create methods to reduce the need for clients to directly access an object's attributes.
+- Use privacy for those attributes and methods that are completely internal to the operation of objects.
+
+And, when you use an object, you should follow these guidelines:
+
+- Minimize the direct reading of an object's attributes.
+- Avoid directly altering an object's attributes.
+- Never attempt to directly access an object's private attributes or methods.
+
+## 8.10 Properties
+
+There are occasions when you want to limit the access to an attribute, but not deny its access completely. With 
+**properties**, you can manage how an attribute is accessed or changed.
+
+A property is a way to control access to a private attribute, it allows indirect access to the attribute and is 
+commonly used to impose some sort of restriction on that access.
+
+To create a property you must create a method that returns the private attribute you want to have access to, and then
+precede this method with the `@property` decorator. The property will have the same name as the method and it's 
+usually a good practice to name the property with the same name as the private attribute without the first two 
+underscores.
+
+Once you create a property as described before, you have provided read access to a private attribute. You can also 
+provide write access, even restrict it, by creating another method with the same name of the property preceded by the 
+decorator `@<name>.setter`, where `<name>` is the name of the property. When you create a setter, the paramater list 
+must include a parameter that will have the value to assign to the private attribute.
+
+Here, I have added a property along with a set method to our class:
+
+```python
+class MyClass(object):
+  """ This is my class, it belongs to me. """
+  # This is a class attribute.
+  total = 0
+  
+  def __init__(self, name, surname):
+    """ This is the initialization method. """
+    self.name = name
+    self.__surname = surname
+    MyClass.total += 1
+    print("Object of type MyClass created. Name: " + self.name)
+    print("Object of type MyClass created. Surname: " + self.__surname)
+    
+  def __str__(self):
+    """ This is the string method. """
+    str = "Object of type MyClass\n"
+    str += "Name: " + self.name + "\n"
+    return str
+    
+  @staticmethod
+  def print_total():
+    """ Prints the total number of instances. """
+    print("Total instances: " + str(MyClass.total))
+   
+  @property
+  def surname(self):
+    return self.__surname
+  
+  @surname.setter
+  def surname(self, new_surname):
+    """ Setter for the property surname """
+    if new_surname:
+      self.__surname = new_surname
+    
+  def __get_full_name(self):
+    """ Returns the full name. """
+    return self.name + " " + self.__surname
+    
+  def print_data(self):
+    """ This is a method, it just prints a random string of data. """
+    print("The full name of the object is: " + self.__get_full_name())
+```
+
+The usage of this property is as follows:
+
+```python
+>>> ex_class0 = MyClass("First", "Class")
+Object of type MyClass created. Name: First
+Object of type MyClass created. Surname: Class
+>>> ex_class0.surname
+'Class'
+# Attempt to change the surname to the empty string, the setter won't allow this.
+>>> ex_class0.surname = ""
+>>> ex_class0.surname
+'Class'
+# Change it to something else
+>>> ex_class0.surname = "Change this"
+>>> ex_class0.surname
+'Change this'
+```
+
 # 20. Notes
 
 **Note 1**: Python is case-sensitive and by convention, function names are in lowercase.
@@ -1842,3 +2349,9 @@ generally frowned upon, you should use return values to communicate with your ap
 
 **Note 17**: If you want to terminate execution, you can call the `sys.exit()` method, which raises an exception that
 which results in the end of the program. You must import the `sys` module first.
+
+**Note 18**: Python has a collection of built-in special methods, whose names being and end with two underscores. The
+initialization method, __init__ is just an example.
+
+**Note 19**: Decorators modify the function or method they are associated to, they are written right before the 
+definition.
