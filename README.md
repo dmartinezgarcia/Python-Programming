@@ -14,6 +14,7 @@ So far the repository contains notes and exercises for the following topics:
 - Chapter 6: Functions
 - Chapter 7: Files and Exceptions
 - Chapter 8: Software Objects
+- Chapter 9: Object Oriented Programming (Just notes)
 
 # 1. Getting Started
 
@@ -2254,6 +2255,361 @@ Object of type MyClass created. Surname: Class
 'Change this'
 ```
 
+# 9. Object-Oriented Programming
+
+The true power of OOP can only be appreciated by seeing a group of objects work together. In this chapter, you will 
+learn how to create multiple objects and define relationships between them so they can interact. Specifically, you 
+will learn about the following:
+
+- Create objects of different classes in the same program
+- Allow objects to communicate with each other
+- Create more complex objects by combining simpler ones
+- Derive new classes from existing ones
+- Extend the definition of existing classes
+- Override method definitions of existing classes
+
+## 9.1 Sending and receiving messages
+
+In programs, objects interact in well-defined ways, they **send messages** to each other, technically, they invoke 
+each other's methods, which is better than directly accessing the attributes.
+
+In the following code, we declare two objects, one object will *send* a message to the other object, which will 
+*receive* a message.
+
+```python
+class Person(object):
+  
+  def __init__(self, name):
+    self.__name = name
+  
+  def shoot(self, person):
+    person.die()
+    
+  def die(self):
+    print(self.__name + " has been shot to death.")
+
+>>> John = Person("John")
+>>> Jack = Person("Jack")
+>>> John.shoot(Jack)
+Jack has been shot to death.
+```
+
+In the code above, we create two instances of the class `Person`. The object called `John` sends a message to the 
+object called `Jack`, through a method. `Jack` receives that message.
+
+## 9.2 Combining objects
+
+Combining objects is the way to create more complex objects from simpler ones. You can think of a complex object, for
+example a `car`, that is made of simpler objects, for example the `engine` or the `wheels`.
+
+This is an example of combining objects to create more complex objects:
+
+```python
+class Gangster(object):
+  def __init__(self, nickname):
+    self.__nickname = nickname
+    
+  def __str__(self):
+    string = self.__nickname
+    return string
+    
+  @property
+  def nickname(self):
+    return self.__nickname
+
+class Gang(object):
+
+  def __init__(self, name):
+    self.__name = name
+    self.__members = []
+  
+  def __str__(self):
+    string = "Gang Name: " + self.__name + "\n"
+    for gangster in self.__members:
+      string += "Member: " + str(gangster) + "\n"
+    return string
+    
+  def add(self, gangster):
+    self.__members.append(gangster)
+     
+  def sack(self, gangster):
+    self.__members.remove(gangster)
+      
+  def sack_all(self):
+    self.__members = []
+    
+>>> big_tuna = Gangster("Big Tuna")
+>>> baby_face = Gangster("Baby Face")
+>>> hicups = Gangster("Hicups")
+>>> hammer = Gangster("Hammer")
+>>> the_gang = Gang("The Spades")
+>>> the_gang.add(big_tuna)
+>>> the_gang.add(baby_face)
+>>> the_gang.add(hicups)
+>>> the_gang.add(hammer)
+>>> print(the_gang)
+Gang Name: The Spades
+Member: Big Tuna
+Member: Baby Face
+Member: Hicups
+Member: Hammer
+```
+
+In this case, we have created a gang of gangsters by combining objects of two different classes.
+
+## 9.3 Inheritance
+
+A fundamental characteristic of Object Oriented Programming is `inheritance`, this allows you to base a new class on 
+an existing one. This means that all the methods and attributes of an existing class will be inherited by the new class.
+
+Inheritance is useful when you want to create a more specialized version of an existing class. The new class gets all 
+the methods and attributes and you can also add new methods and attributes to extend it.
+
+In the following code we create a new class from the `Gangster` class, inheriting its methods and adding a new one.
+
+```python
+class Gangster(object):
+  
+  def __init__(self, nickname):
+    self.nickname = nickname
+    
+  def __str__(self):
+    string = self.nickname
+    return string
+
+class Godfather(Gangster):
+
+  def talk_to_gangster(self, gangster):
+    print(self.nickname + " speaks to " + gangster.nickname)
+
+class Gang(object):
+
+  def __init__(self, name):
+    self.__name = name
+    self.__members = []
+  
+  def __str__(self):
+    string = "Gang Name: " + self.__name + "\n"
+    for gangster in self.__members:
+      string += "Member: " + str(gangster) + "\n"
+    return string
+    
+  def add(self, gangster):
+    self.__members.append(gangster)
+     
+  def sack(self, gangster):
+    self.__members.remove(gangster)
+      
+  def sack_all(self):
+    self.__members = []
+
+>>> big_tuna = Gangster("Big Tuna")
+>>> baby_face = Gangster("Baby Face")
+>>> hicups = Gangster("Hicups")
+>>> hammer = Gangster("Hammer")
+>>> bane = Godfather("Bane")
+>>> the_gang = Gang("The Spades")
+>>> the_gang.add(big_tuna)
+>>> the_gang.add(baby_face)
+>>> the_gang.add(hicups)
+>>> the_gang.add(hammer)
+>>> the_gang.add(bane)
+>>> print(the_gang)
+Gang Name: The Spades
+Member: Big Tuna
+Member: Baby Face
+Member: Hicups
+Member: Hammer
+>>> bane.talk_to_gangster(big_tuna)
+Bane speaks to Big Tuna
+```
+
+You can redefine methods inherited from the base class in a derived class. This is known as **overriding** a method. 
+When you override a method you can do two different things:
+
+1. Create a method with completely new functionality.
+2. Incorporate the functionality of the base class method you override.
+
+### 9.3.1 Overriding a method
+
+To override a method, you just define a new method in your derived class with the same name as the method you want to
+override. Overriding has no effect on the base class, only on the derived class. The following code is an example on 
+how to override a method, the overridden method is `__str__()`:
+
+```python
+class Gangster(object):
+  
+  def __init__(self, nickname):
+    self.nickname = nickname
+    
+  def __str__(self):
+    string = self.nickname
+    return string
+
+class Godfather(Gangster):
+
+  def __str__(self):
+    string = "Godfather " + self.nickname
+    return string
+
+  def talk_to_gangster(self, gangster):
+    print(self.nickname + " speaks to " + gangster.nickname)
+
+class Gang(object):
+
+  def __init__(self, name):
+    self.__name = name
+    self.__members = []
+  
+  def __str__(self):
+    string = "Gang Name: " + self.__name + "\n"
+    for gangster in self.__members:
+      string += "Member: " + str(gangster) + "\n"
+    return string
+    
+  def add(self, gangster):
+    self.__members.append(gangster)
+     
+  def sack(self, gangster):
+    self.__members.remove(gangster)
+      
+  def sack_all(self):
+    self.__members = []
+
+>>> big_tuna = Gangster("Big Tuna")
+>>> baby_face = Gangster("Baby Face")
+>>> hicups = Gangster("Hicups")
+>>> hammer = Gangster("Hammer")
+>>> bane = Godfather("Bane")
+>>> the_gang = Gang("The Spades")
+>>> the_gang.add(big_tuna)
+>>> the_gang.add(baby_face)
+>>> the_gang.add(hicups)
+>>> the_gang.add(hammer)
+>>> the_gang.add(bane)
+>>> print(the_gang)
+Gang Name: The Spades
+Member: Big Tuna
+Member: Baby Face
+Member: Hicups
+Member: Hammer
+Member: Godfather Bane
+```
+
+### 9.3.2 Invoke a method of the superclass
+
+The term base class which we were talking about earlier is commonly referred to as **superclass** in Python. You can 
+use the `super()` function to invoke a method from the superclass. The `super()` function takes two arguments, the 
+first one is the derived class whose superclass method you want to invoke, the second one is the known `self` argument.
+
+Following the call to `super()`, you can invoke methods from the superclass using dot notation. This code is an 
+example of a derived class invoking a superclass:
+
+```python
+class Gangster(object):
+  
+  def __init__(self, nickname):
+    self.nickname = nickname
+    
+  def __str__(self):
+    string = self.nickname
+    return string
+
+class Godfather(Gangster):
+
+  def __str__(self):
+    string = "Godfather " + super(Godfather, self).__str__()
+    return string
+
+  def talk_to_gangster(self, gangster):
+    print(self.nickname + " speaks to " + gangster.nickname)
+
+class Gang(object):
+
+  def __init__(self, name):
+    self.__name = name
+    self.__members = []
+  
+  def __str__(self):
+    string = "Gang Name: " + self.__name + "\n"
+    for gangster in self.__members:
+      string += "Member: " + str(gangster) + "\n"
+    return string
+    
+  def add(self, gangster):
+    self.__members.append(gangster)
+     
+  def sack(self, gangster):
+    self.__members.remove(gangster)
+      
+  def sack_all(self):
+    self.__members = []
+
+>>> big_tuna = Gangster("Big Tuna")
+>>> baby_face = Gangster("Baby Face")
+>>> hicups = Gangster("Hicups")
+>>> hammer = Gangster("Hammer")
+>>> bane = Godfather("Bane")
+>>> the_gang = Gang("The Spades")
+>>> the_gang.add(big_tuna)
+>>> the_gang.add(baby_face)
+>>> the_gang.add(hicups)
+>>> the_gang.add(hammer)
+>>> the_gang.add(bane)
+>>> print(the_gang)
+Gang Name: The Spades
+Member: Big Tuna
+Member: Baby Face
+Member: Hicups
+Member: Hammer
+Member: Godfather Bane
+```
+
+### 9.3.3 Polymorphism
+
+**Polymorphism** is the quality of being able to treat different types of things the same and have those things each 
+react in their own way. In the context of OOP, it means that you can send the same message to objects of different 
+classes related by inheritance and achieve different results.
+
+This is what we have seen in the previous sections when overriding methods and working with inheritance.
+
+## 9.4 Modules
+
+We have seen this before, specifically the importing modules part. In Python, you can create, use and share modules. 
+These allow you to reuse code, to break up the code into logical modules and to share your code with other people.
+
+### 9.4.1 Creating modules
+
+You create a module just like you create any other program in Python. However, modules should have a collection of 
+related programming components, such as functions and classes, and store them in a single file to be imported into a 
+new program.
+
+Programmer created modules are named and imported based on their file names. For example, we could name the code we 
+have been working on in this chapter `gang.py`.
+
+### 9.4.2 Importing modules
+
+You import programmer created modules just like you import Python built-in modules, using the `import` keyword. You 
+can do it like this:
+
+```python
+import random, gang
+```
+
+It's important to note that the filename associated to the module must be in the program directory that imports it, 
+there are ways around this, the reader is welcomed to investigate about this.
+
+### 9.4.3 Using imported modules
+
+To use functions and classes from a module, you use dot notation. You write the name of the module followed by a dot 
+followed by the name of the function, class or any other object you wish to access. For example:
+
+```python
+import random, gang
+
+gang.Gangster("Big Tuna")
+```
+
 # 20. Notes
 
 **Note 1**: Python is case-sensitive and by convention, function names are in lowercase.
@@ -2355,3 +2711,6 @@ initialization method, __init__ is just an example.
 
 **Note 19**: Decorators modify the function or method they are associated to, they are written right before the 
 definition.
+
+**Note 20**: There is a variety of formal methods for mapping software projects. One of the most popular is UML, or 
+`Unified Modeling Language`, a notational language that is specially useful for visualizing object-oriented systems.
